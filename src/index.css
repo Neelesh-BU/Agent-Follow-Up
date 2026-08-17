@@ -1,0 +1,27 @@
+:root {
+  font-family: "Plus Jakarta Sans", "Segoe UI", Arial, sans-serif;
+  color: #122033;
+  background: #eef4f8;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  min-height: 100vh;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
