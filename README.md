@@ -1,64 +1,18 @@
-# Frontend
+# React + Vite
 
-This is the separated frontend package for the Plivo scheduler follow-up app.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-## What It Does
+Currently, two official plugins are available:
 
-This frontend is now a real API-driven React app.
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
 
-It handles:
+## React Compiler
 
-- scheduler login
-- forgot password
-- reset password
-- dashboard metrics
-- manual follow-up creation
-- bulk upload
-- call-now / complete / delete actions
+The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
 
-The backend remains responsible for:
+Note: This will impact Vite dev & build performances.
 
-- auth cookies
-- scheduler APIs
-- Plivo calling and streaming
-- STT/TTS integrations
-- WhatsApp automation
+## Expanding the ESLint configuration
 
-## Configure
-
-Create a `.env` file:
-
-```bash
-VITE_BACKEND_ORIGIN=https://your-backend-domain.example
-```
-
-If omitted, the frontend uses the current origin.
-
-## Backend Requirements
-
-If frontend and backend are deployed on different origins, the backend must be
-configured with:
-
-```bash
-FRONTEND_ORIGIN=https://your-frontend-domain.example
-AUTH_COOKIE_SAMESITE=None
-AUTH_COOKIE_SECURE=true
-```
-
-Without those settings, browser login cookies will not work reliably across the
-two services.
-
-## Run
-
-```bash
-npm install
-npm run dev
-```
-
-## Routes
-
-- `/`
-- `/login`
-- `/dashboard`
-- `/forgot-password`
-- `/reset-password`
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
