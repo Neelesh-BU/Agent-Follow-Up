@@ -58,10 +58,17 @@ export const deleteSchedulerApi = async (userId) => {
   return response.data;
 };
 
+export const createSchedulerApi = async (payload) => {
+  const url = getAPIMap('createScheduler') || '/v1/scheduler/create-scheduler';
+  const response = await api.post(url, payload);
+  return response.data;
+};
+
 export default {
   getAccountsOverviewApi,
   updateProfileApi,
   getSchedulersApi,
+  createSchedulerApi,
   resendInviteApi,
   activateSchedulerApi,
   deleteSchedulerApi,

@@ -23,9 +23,14 @@ export const APIMapping = {
 
   // Scheduler Route
   getAccountsOverview: '/v1/scheduler/accounts-overview',
+  schedulerAccountsOverview: '/v1/scheduler/accounts-overview',
   updateProfile: '/v1/scheduler/update-profile',
   getSchedulers: '/v1/scheduler/get-schedulers',
+  schedulers: '/v1/scheduler/get-schedulers',
+  createScheduler: '/v1/scheduler/create-scheduler',
+  addScheduler: '/v1/scheduler/create-scheduler',
   resendInvite: '/v1/scheduler/:userId/invite',
+  inviteScheduler: '/v1/scheduler/:userId/invite',
   activateScheduler: '/v1/scheduler/:userId/activate',
   deleteScheduler: '/v1/scheduler/:userId/delete',
 

@@ -23,6 +23,12 @@ export const RichTextEditor = ({
   });
   const [isEmpty, setIsEmpty] = useState(true);
 
+  const checkEmpty = useCallback(() => {
+    if (!editorRef.current) return;
+    const text = editorRef.current.innerText?.trim() || '';
+    setIsEmpty(text.length === 0 && !editorRef.current.querySelector('img, ul, ol, li'));
+  }, []);
+
   // Sync incoming value to editor content if changed externally
   useEffect(() => {
     if (editorRef.current) {
@@ -31,13 +37,7 @@ export const RichTextEditor = ({
         checkEmpty();
       }
     }
-  }, [value]);
-
-  const checkEmpty = () => {
-    if (!editorRef.current) return;
-    const text = editorRef.current.innerText?.trim() || '';
-    setIsEmpty(text.length === 0 && !editorRef.current.querySelector('img, ul, ol, li'));
-  };
+  }, [value, checkEmpty]);
 
   const updateActiveFormats = useCallback(() => {
     try {
