@@ -15,6 +15,7 @@ const DashboardPage = lazy(() => import('@/pages/DashboardPage'));
 const SchedulerAccountsPage = lazy(
   () => import('@/pages/SchedulerAccountsPage'),
 );
+const JobsPage = lazy(() => import('@/pages/JobsPage'));
 const AccountPage = lazy(() => import('@/pages/AccountPage'));
 const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'));
 
@@ -45,6 +46,7 @@ export const AppRoutes = () => {
               path={PATHS.SCHEDULERS}
               element={<SchedulerAccountsPage />}
             />
+            <Route path={PATHS.JOBS} element={<JobsPage />} />
             <Route path={PATHS.ACCOUNT} element={<AccountPage />} />
           </Route>
         </Route>

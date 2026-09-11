@@ -62,14 +62,14 @@ export const ForgotPasswordPage = () => {
             placeholder={t('auth.emailPlaceholder')}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className='h-11 px-3.5 border border-slate-300 rounded-xl text-xs font-semibold text-slate-800 outline-none focus:border-[#007cc2]'
+            className='h-11 px-3.5 border border-slate-300 rounded-xl text-xs font-semibold text-slate-800 outline-none focus:border-[#10b981]'
           />
         </div>
 
         <button
           type='submit'
           disabled={isSubmitting}
-          className='h-11 mt-2 bg-[#007cc2] hover:bg-[#006ca9] disabled:opacity-60 text-white font-extrabold text-xs rounded-xl shadow-md transition-all cursor-pointer'
+          className='h-11 mt-2 bg-[#1e3a34] hover:bg-[#152e29] disabled:opacity-60 text-white font-extrabold text-xs rounded-xl shadow-md transition-all cursor-pointer'
         >
           {isSubmitting ? t('auth.sending') : t('auth.sendResetLink')}
         </button>
@@ -78,7 +78,7 @@ export const ForgotPasswordPage = () => {
       <div className='mt-4 text-center'>
         <Link
           to={PATHS.LOGIN}
-          className='text-xs font-bold text-[#007cc2] hover:underline'
+          className='text-xs font-bold text-[#059669] hover:underline'
         >
           {t('auth.backToLogin')}
         </Link>

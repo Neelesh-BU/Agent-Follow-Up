@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import DateTimePickerField from "@/components/common/DateTimePickerField";
+import DateTimePickerField, { isTimePast } from "@/components/common/DateTimePickerField";
 import SelectDropdown from "@/components/common/SelectDropdown";
 import { displayDate, normalizeTimeInputValue } from "@/utils/formatters";
 import {
@@ -57,17 +57,22 @@ export const FollowUpDetailModal = ({
   const recordId = initialData?.id || initialData?.record_id || "";
 
   // Query single record details from view-record API by passing id
-  const { data: viewRecordResponse } = useViewRecordQuery(
-    recordId,
-    { enabled: Boolean(isOpen && recordId) }
-  );
+  const { data: viewRecordResponse } = useViewRecordQuery(recordId, {
+    enabled: Boolean(isOpen && recordId),
+  });
 
   const activeRecord = useMemo(() => {
     if (viewRecordResponse?.data) {
       return {
         ...viewRecordResponse.data,
-        id: recordId || viewRecordResponse.data.id || viewRecordResponse.data.record_id,
-        record_id: recordId || viewRecordResponse.data.record_id || viewRecordResponse.data.id,
+        id:
+          recordId ||
+          viewRecordResponse.data.id ||
+          viewRecordResponse.data.record_id,
+        record_id:
+          recordId ||
+          viewRecordResponse.data.record_id ||
+          viewRecordResponse.data.id,
       };
     }
     return initialData;
@@ -143,48 +148,64 @@ export const FollowUpDetailModal = ({
     setFormData((prev) => ({ ...prev, phone: digitsOnly }));
   };
 
-  const { data: companiesResponse } = useCompaniesQuery();
-  const companyOptions = useMemo(() => {
-    return (companiesResponse?.data || []).map((c) => ({
-      value: c.company_id,
-      label: c.company_name,
-      name: c.company_name,
-    }));
-  }, [companiesResponse]);
-
-  const currentCompanyId = useMemo(() => {
-    const exactMatch = companyOptions.find(
-      (c) => c.value === formData.interview_company,
-    );
-    if (exactMatch) return exactMatch.value;
-    const nameMatch = companyOptions.find(
-      (c) => c.label === formData.interview_company,
-    );
-    if (nameMatch) return nameMatch.value;
-    return formData.interview_company;
-  }, [formData.interview_company, companyOptions]);
+  const { data: companiesResponse } = useCompaniesQuery({
+    enabled: Boolean(isOpen),
+  });
 
   const { data: jobsResponse } = useJobsQuery(
-    { company_id: currentCompanyId },
-    { enabled: !!currentCompanyId },
+    { limit: 200, status: "active" },
+    { enabled: Boolean(isOpen) },
   );
 
-  const jobOptions = useMemo(() => {
-    return (jobsResponse?.data || []).map((j) => ({
-      value: String(j.job_id), // Storing job_id for the backend
-      label: `${j.job_id}-${j.job_title}`,
-      name: j.job_title,
+  const companyOptions = useMemo(() => {
+    const rawList = companiesResponse?.data || [];
+    const jobs = jobsResponse?.data || [];
+    const companiesFromJobs = jobs.map((j) => j.company_name);
+    const combined = Array.from(
+      new Set(
+        [...rawList, ...companiesFromJobs]
+          .map((c) =>
+            typeof c === "string" ? c : c?.company_name || c?.name || c?.label,
+          )
+          .filter(Boolean),
+      ),
+    );
+    return combined.map((comp) => ({
+      value: comp,
+      label: comp,
+      name: comp,
     }));
-  }, [jobsResponse]);
+  }, [companiesResponse, jobsResponse]);
+
+  const jobOptions = useMemo(() => {
+    const jobs = jobsResponse?.data || [];
+    const filtered = formData.interview_company
+      ? jobs.filter(
+          (j) =>
+            j.company_name?.toLowerCase() ===
+            formData.interview_company.toLowerCase(),
+        )
+      : jobs;
+
+    return filtered.map((j) => ({
+      value: String(j.job_id),
+      label: `#${j.job_id} - ${j.job_title}`,
+      name: j.job_title,
+      subLabel: j.company_name,
+      company: j.company_name,
+    }));
+  }, [jobsResponse, formData.interview_company]);
 
   useEffect(() => {
     const matchedScheduler = schedulerOptions.find(
       (s) =>
         (activeRecord?.scheduler_email &&
-          s.email?.toLowerCase() === activeRecord.scheduler_email.toLowerCase()) ||
+          s.email?.toLowerCase() ===
+            activeRecord.scheduler_email.toLowerCase()) ||
         (activeRecord?.scheduler_name &&
-          s.name?.toLowerCase() === activeRecord.scheduler_name.toLowerCase()) ||
-        s.value === activeRecord?.scheduler_id
+          s.name?.toLowerCase() ===
+            activeRecord.scheduler_name.toLowerCase()) ||
+        s.value === activeRecord?.scheduler_id,
     );
 
     const defaultSchedulerId =
@@ -198,9 +219,9 @@ export const FollowUpDetailModal = ({
     if (activeRecord) {
       const rawPhone = String(
         activeRecord.candidate_phone ||
-        activeRecord.phone ||
-        activeRecord.phone_number ||
-        "",
+          activeRecord.phone ||
+          activeRecord.phone_number ||
+          "",
       );
       const cleanedInitialPhone = rawPhone
         .replace(/^\+91\s*/, "")
@@ -213,7 +234,7 @@ export const FollowUpDetailModal = ({
 
       const rawTime = activeRecord.interview_time || "";
       const parsedTime = rawTime
-        ? (normalizeTimeInputValue(rawTime) || rawTime)
+        ? normalizeTimeInputValue(rawTime) || rawTime
         : "";
 
       setFormData({
@@ -224,7 +245,12 @@ export const FollowUpDetailModal = ({
           activeRecord.interview_company || activeRecord.company_name || "",
         interview_date: parsedDate,
         interview_time: parsedTime,
-        role: String(activeRecord.job_title || activeRecord.job_id || activeRecord.role || ""),
+        role: String(
+          activeRecord.job_title ||
+            activeRecord.job_id ||
+            activeRecord.role ||
+            "",
+        ),
         scheduler_id: defaultSchedulerId,
         status: activeRecord.status || activeRecord.call_pipeline || "pending",
         notes: activeRecord.notes || "",
@@ -276,15 +302,18 @@ export const FollowUpDetailModal = ({
       return;
     }
 
-    if (formData.interview_date === displayDate(minDateIso)) {
-      const now = new Date();
-      const currentMinutes = now.getHours() * 60 + now.getMinutes();
-
-      const timeStr = formData.interview_time || "00:00";
-      const [hours, mins] = timeStr.split(":").map(Number);
-      const selectedMinutes = hours * 60 + (mins || 0);
-
-      if (selectedMinutes <= currentMinutes) {
+    if (formData.interview_date && formData.interview_time) {
+      const timeStr = formData.interview_time;
+      const [hStr, mStr] = timeStr.split(":");
+      let hNum = Number(hStr);
+      let period = "AM";
+      if (hNum >= 12) {
+        period = "PM";
+        if (hNum > 12) hNum -= 12;
+      } else if (hNum === 0) {
+        hNum = 12;
+      }
+      if (isTimePast(hNum, mStr || "00", period, formData.interview_date)) {
         alert(
           t("modals.pastTimeError", {
             defaultValue: "Interview time cannot be in the past.",
@@ -294,15 +323,19 @@ export const FollowUpDetailModal = ({
       }
     }
 
-    const company = companyOptions.find((c) => c.value === currentCompanyId);
+    const company = companyOptions.find(
+      (c) =>
+        c.value === formData.interview_company ||
+        c.label === formData.interview_company,
+    );
     const job = jobOptions.find(
       (j) =>
-        j.value === formData.role ||
+        String(j.value) === String(formData.role) ||
         j.label === formData.role ||
         j.name === formData.role,
     );
 
-    if (formData.role && !job) {
+    if (formData.role && !job && !activeRecord?.job_id) {
       alert(
         t("modals.invalidJobError", {
           defaultValue: "Please select a valid Job Title from the dropdown.",
@@ -328,8 +361,10 @@ export const FollowUpDetailModal = ({
       record_id: effectiveId,
       phone: fullPhone,
       phone_number: fullPhone,
-      company_name: company ? company.label : formData.interview_company,
-      job_id: job ? job.value : "",
+      company_name: company
+        ? company.label
+        : job?.company || formData.interview_company,
+      job_id: job ? String(job.value) : activeRecord?.job_id || "",
       job_title: job ? job.name : formData.role,
     };
 
@@ -437,7 +472,7 @@ export const FollowUpDetailModal = ({
                   onChange={(e) =>
                     setFormData({ ...formData, candidate_name: e.target.value })
                   }
-                  className="h-9 px-3 border border-slate-300 rounded-lg text-xs font-semibold text-slate-800 outline-none focus:border-[#007cc2]"
+                  className="h-9 px-3 border border-slate-300 rounded-lg text-xs font-semibold text-slate-800 outline-none focus:border-[#10b981]"
                 />
               </div>
 
@@ -458,7 +493,7 @@ export const FollowUpDetailModal = ({
                   onChange={(e) =>
                     setFormData({ ...formData, email: e.target.value })
                   }
-                  className="h-9 px-3 border border-slate-300 rounded-lg text-xs font-semibold text-slate-800 outline-none focus:border-[#007cc2]"
+                  className="h-9 px-3 border border-slate-300 rounded-lg text-xs font-semibold text-slate-800 outline-none focus:border-[#10b981]"
                 />
               </div>
 
@@ -488,7 +523,7 @@ export const FollowUpDetailModal = ({
                   className={`h-9 px-3 border rounded-lg text-xs font-semibold text-slate-800 outline-none transition-colors ${
                     formData.phone.length > 0 && formData.phone.length < 10
                       ? "border-amber-400 focus:border-amber-500"
-                      : "border-slate-300 focus:border-[#007cc2]"
+                      : "border-slate-300 focus:border-[#10b981]"
                   } ${isComplete ? "bg-slate-50 cursor-not-allowed text-slate-500" : ""}`}
                 />
               </div>
@@ -504,15 +539,13 @@ export const FollowUpDetailModal = ({
                 <SelectDropdown
                   value={formData.interview_company}
                   onChange={(val) => {
-                    setFormData({
-                      ...formData,
+                    setFormData((prev) => ({
+                      ...prev,
                       interview_company: val,
-                      role: "",
-                    });
+                    }));
                     setErrors((prev) => ({
                       ...prev,
                       interview_company: false,
-                      role: false,
                     }));
                   }}
                   options={companyOptions}
@@ -536,14 +569,28 @@ export const FollowUpDetailModal = ({
                 <SelectDropdown
                   value={formData.role}
                   onChange={(val) => {
-                    setFormData({ ...formData, role: val });
-                    setErrors((prev) => ({ ...prev, role: false }));
+                    const matchedJob = (jobsResponse?.data || []).find(
+                      (j) => String(j.job_id) === String(val),
+                    );
+                    setFormData((prev) => ({
+                      ...prev,
+                      role: val,
+                      interview_company:
+                        prev.interview_company ||
+                        matchedJob?.company_name ||
+                        "",
+                    }));
+                    setErrors((prev) => ({
+                      ...prev,
+                      role: false,
+                      interview_company: false,
+                    }));
                   }}
                   options={jobOptions}
                   placeholder={t("modals.jobTitlePlaceholder", {
                     defaultValue: "-- Select Job Title --",
                   })}
-                  disabled={isComplete || !formData.interview_company}
+                  disabled={isComplete}
                   variant="form"
                   className="w-full"
                   isSearchable={true}
@@ -588,13 +635,14 @@ export const FollowUpDetailModal = ({
                   type="time"
                   required
                   disabled={isComplete || !formData.interview_date}
-                  disablePastTime={
-                    formData.interview_date === displayDate(minDateIso)
-                  }
+                  selectedDate={formData.interview_date}
+                  disablePastTime={true}
                   value={formData.interview_time}
-                  onChange={(val) =>
-                    setFormData({ ...formData, interview_time: val })
-                  }
+                  onChange={(val) => {
+                    setFormData({ ...formData, interview_time: val });
+                    setErrors((prev) => ({ ...prev, interview_time: false }));
+                  }}
+                  error={errors.interview_time}
                 />
               </div>
             </div>
@@ -634,7 +682,7 @@ export const FollowUpDetailModal = ({
                   <button
                     type="submit"
                     disabled={isLoading}
-                    className="px-5 py-2 bg-[#007cc2] hover:bg-[#006ca9] disabled:opacity-60 disabled:cursor-not-allowed text-white rounded-lg font-bold text-xs shadow-md transition-colors cursor-pointer inline-flex items-center justify-center gap-2 min-w-[75px]"
+                    className="px-5 py-2.5 bg-linear-to-r from-[#10b981] to-[#059669] hover:from-[#059669] hover:to-[#047857] disabled:opacity-60 disabled:cursor-not-allowed text-white rounded-xl font-bold text-xs shadow-md shadow-[#10b981]/25 transition-all cursor-pointer inline-flex items-center justify-center gap-2 min-w-[85px]"
                   >
                     {isLoading ? (
                       <>
@@ -650,7 +698,9 @@ export const FollowUpDetailModal = ({
                     ) : (
                       <span>
                         {isRescheduleRequested
-                          ? t("common.reschedule", { defaultValue: "Reschedule" })
+                          ? t("common.reschedule", {
+                              defaultValue: "Reschedule",
+                            })
                           : t("common.save", { defaultValue: "Save" })}
                       </span>
                     )}

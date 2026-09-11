@@ -10,10 +10,10 @@ export const AuthLayout = () => {
   const { t } = useTranslation();
 
   return (
-    <div className='min-h-screen flex items-center justify-center p-3 sm:p-4 lg:p-5 bg-linear-to-b from-[#f3f7fb] via-[#ecf3f9] to-[#e2edf7] text-[#161b2f]'>
-      <section className='w-full max-w-[980px] grid grid-cols-1 lg:grid-cols-[1.2fr_minmax(340px,380px)] bg-white border border-[#e5eaf0] rounded-[22px] overflow-hidden shadow-[0_16px_50px_-12px_rgba(0,124,194,0.12),0_4px_16px_rgba(0,0,0,0.03)] animate-in fade-in zoom-in-[0.98] slide-in-from-bottom-4 duration-700 ease-out'>
+    <div className='min-h-screen flex items-center justify-center p-3 sm:p-4 lg:p-5 bg-linear-to-br from-[#f0fdf4] via-[#f8fdfa] to-[#ecfdf5] text-[#0f172a]'>
+      <section className='w-full max-w-[980px] grid grid-cols-1 lg:grid-cols-[1.2fr_minmax(340px,380px)] bg-white border border-[#d1fae5]/80 rounded-[22px] overflow-hidden shadow-[0_20px_50px_-12px_rgba(16,185,129,0.12),0_4px_16px_rgba(0,0,0,0.03)] animate-in fade-in zoom-in-[0.98] slide-in-from-bottom-4 duration-700 ease-out'>
         {/* Left Hero Brand Panel */}
-        <div className='hidden lg:flex flex-col justify-between p-6 lg:p-7 bg-linear-to-b from-[#f8fbfe] via-[#f1f7fd] to-[#eaf2fb] border-r border-[#e8eff6] relative overflow-hidden'>
+        <div className='hidden lg:flex flex-col justify-between p-6 lg:p-7 bg-linear-to-b from-[#f7fdfa] via-[#f0fdf4] to-[#e6f9ed] border-r border-[#d1fae5] relative overflow-hidden'>
           {/* Decorative Dot Matrix in top-right */}
           <img
             src={DotMatrixIcon}
@@ -24,19 +24,19 @@ export const AuthLayout = () => {
 
           {/* Top Logo & Headings */}
           <div className='relative z-10'>
-            {/* Curatal Brand Logo */}
-            <div className='mb-3.5'>
+            {/* Agent Follow-up Brand Logo */}
+            <div className='mb-4 lg:mb-5'>
               <img
-                src='/assets/curatal-logo.svg'
-                alt='Curatal'
-                className='h-7.5 w-auto object-contain block select-none'
+                src='/assets/Logo.png'
+                alt='Agent Follow-up'
+                className='h-14 lg:h-16 w-auto object-contain block select-none'
               />
             </div>
 
             {/* Typography */}
             <h1 className='text-[24px] lg:text-[27px] font-black text-slate-900 tracking-tight leading-[1.15]'>
               {t('auth.heroTitle')}
-              <span className='block text-[#007cc2] font-black mt-0.5'>
+              <span className='block text-[#10b981] font-black mt-0.5'>
                 {t('auth.heroSubtitleHighlight')}
               </span>
             </h1>
@@ -51,12 +51,12 @@ export const AuthLayout = () => {
             <img
               src={LoginBanner}
               alt='Candidate Follow-up Pipeline Automation'
-              className='w-full max-w-[320px] lg:max-w-[350px] h-auto object-contain select-none pointer-events-none drop-shadow-[0_10px_20px_rgba(0,124,194,0.08)]'
+              className='w-full max-w-[320px] lg:max-w-[350px] h-auto object-contain select-none pointer-events-none drop-shadow-[0_10px_20px_rgba(16,185,129,0.08)]'
             />
           </div>
 
           {/* Bottom 3-Feature Card */}
-          <div className='relative z-10 bg-white rounded-xl p-2.5 sm:p-3 border border-slate-100/90 shadow-[0_3px_18px_rgba(0,124,194,0.06)]'>
+          <div className='relative z-10 bg-white rounded-xl p-2.5 sm:p-3 border border-emerald-100/80 shadow-[0_3px_18px_rgba(16,185,129,0.06)]'>
             <div className='grid grid-cols-3 divide-x divide-slate-100'>
               {/* Feature 1: Better Engagement */}
               <div className='flex flex-col items-center text-center px-1.5'>
@@ -119,9 +119,9 @@ export const AuthLayout = () => {
         <div className='p-6 sm:p-7 lg:p-8 flex flex-col justify-center'>
           <div className='lg:hidden mb-5 flex justify-center'>
             <img
-              src='/assets/curatal-logo.svg'
-              alt='Curatal'
-              className='w-30 h-auto'
+              src='/assets/Logo.png'
+              alt='Agent Follow-up'
+              className='h-11 w-auto object-contain'
             />
           </div>
           <Outlet />

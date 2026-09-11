@@ -3,29 +3,39 @@ import getAPIMap from "@/routes/ApiUrls";
 import { buildAddSchedulerPayload } from "./schedulers.payload";
 
 export async function getSchedulersApi(params = {}) {
-  const response = await api.get(getAPIMap("schedulers"), { params });
+  const url = getAPIMap("schedulers");
+  if (!url) return { schedulers: [], totalResults: 0 };
+  const response = await api.get(url, { params });
   return response.data;
 }
 
 export async function getSchedulerAccountsOverviewApi(params = {}) {
-  const response = await api.get(getAPIMap("schedulerAccountsOverview"), { params });
+  const url = getAPIMap("schedulerAccountsOverview");
+  if (!url) return { schedulers: [] };
+  const response = await api.get(url, { params });
   return response.data;
 }
 
 export async function addSchedulerApi(formData) {
+  const url = getAPIMap("schedulers");
+  if (!url) return {};
   const payload = buildAddSchedulerPayload(formData);
-  const response = await api.post(getAPIMap("schedulers"), payload);
+  const response = await api.post(url, payload);
   return response.data;
 }
 
 export async function resendSchedulerInviteApi(userId) {
-  const url = getAPIMap("inviteScheduler").replace("{id}", userId);
+  const endpoint = getAPIMap("inviteScheduler");
+  if (!endpoint) return {};
+  const url = endpoint.replace("{id}", userId);
   const response = await api.post(url);
   return response.data;
 }
 
 export async function deactivateSchedulerApi(userId) {
-  const url = getAPIMap("schedulerById").replace("{id}", userId);
+  const endpoint = getAPIMap("deleteScheduler") || (getAPIMap("schedulerById") ? `${getAPIMap("schedulerById")}/delete` : "");
+  if (!endpoint) return {};
+  const url = endpoint.replace("{id}", userId);
   try {
     const response = await api.delete(url, {
       data: { status: "2", role: "2", is_active: false },
@@ -45,13 +55,17 @@ export async function deactivateSchedulerApi(userId) {
 }
 
 export async function activateSchedulerApi(userId) {
-  const activateUrl = getAPIMap("activateScheduler").replace("{id}", userId);
+  const activateEndpoint = getAPIMap("activateScheduler");
+  if (!activateEndpoint) return {};
+  const activateUrl = activateEndpoint.replace("{id}", userId);
   try {
     const response = await api.post(activateUrl);
     return response.data;
   } catch (err) {
+    const fallbackEndpoint = getAPIMap("schedulerById");
+    if (!fallbackEndpoint) return {};
     try {
-      const patchUrl = getAPIMap("schedulerById").replace("{id}", userId);
+      const patchUrl = fallbackEndpoint.replace("{id}", userId);
       const patchResponse = await api.patch(patchUrl, {
         status: "1",
       });

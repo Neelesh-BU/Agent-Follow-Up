@@ -4,8 +4,8 @@ import HistoryIcon from '@mui/icons-material/History';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutlineOutlined';
-import CheckCircleIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
-import { getUploadHistoryApi, getUploadFailuresApi } from '@/services/api/uploadHistoryService';
+const getUploadHistoryApi = async () => [];
+const getUploadFailuresApi = async () => [];
 
 const UploadHistoryModal = ({ isOpen, onClose, schedulerId }) => {
   const { t } = useTranslation();

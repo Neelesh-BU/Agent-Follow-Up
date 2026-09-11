@@ -317,7 +317,7 @@ export const PipelineFlowFunnel = ({ counts = {} }) => {
             {/* Modal Header */}
             <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100 bg-slate-50/70 shrink-0">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-[#007cc2]/10 text-[#007cc2] flex items-center justify-center shadow-inner">
+                <div className="w-10 h-10 rounded-2xl bg-emerald-50 border border-emerald-200 text-[#059669] flex items-center justify-center shadow-xs">
                   <InfoOutlinedIcon sx={{ fontSize: 22 }} />
                 </div>
                 <div>
@@ -380,7 +380,7 @@ export const PipelineFlowFunnel = ({ counts = {} }) => {
               <button
                 type="button"
                 onClick={() => setIsGuideOpen(false)}
-                className="px-5 py-2.5 bg-[#007cc2] hover:bg-[#006ca9] text-white rounded-xl font-bold text-xs shadow-xs transition-colors cursor-pointer"
+                className="px-5 py-2.5 bg-linear-to-r from-[#10b981] to-[#059669] hover:from-[#059669] hover:to-[#047857] text-white rounded-xl font-bold text-xs shadow-md shadow-[#10b981]/20 transition-all cursor-pointer"
               >
                 Got It
               </button>

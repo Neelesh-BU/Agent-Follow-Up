@@ -90,10 +90,10 @@ export const MuiDateRangePicker = ({
         onClick={handleOpen}
         disabled={disabled}
         className={`h-8.5 px-3 bg-white hover:bg-slate-50 border border-slate-200 hover:border-slate-300 rounded-lg inline-flex items-center gap-2 text-xs font-bold text-slate-800 shadow-2xs transition-all cursor-pointer select-none ${
-          isOpen ? 'ring-2 ring-[#007cc2]/20 border-[#007cc2]' : ''
+          isOpen ? 'ring-2 ring-[#10b981]/20 border-[#10b981]' : ''
         } ${disabled ? 'opacity-50 cursor-not-allowed' : ''} ${className}`}
       >
-        <CalendarMonthOutlinedIcon sx={{ fontSize: 16, color: '#007cc2' }} />
+        <CalendarMonthOutlinedIcon sx={{ fontSize: 16, color: '#10b981' }} />
         <span className='truncate'>{formattedRangeLabel}</span>
         <KeyboardArrowDownIcon
           sx={{
@@ -175,7 +175,7 @@ export const MuiDateRangePicker = ({
               <button
                 type='button'
                 onClick={handleApply}
-                className='px-4 py-1.5 bg-[#007cc2] hover:bg-[#006ca9] text-white text-xs font-extrabold rounded-lg shadow-xs transition-colors cursor-pointer'
+                className='px-4 py-1.5 bg-linear-to-r from-[#10b981] to-[#059669] hover:from-[#059669] hover:to-[#047857] text-white text-xs font-extrabold rounded-lg shadow-md shadow-[#10b981]/20 transition-all cursor-pointer'
               >
                 Apply Range
               </button>

@@ -323,9 +323,9 @@ export const MuiCalendar = ({
             <div
               key={dateStr}
               className={`relative flex items-center justify-center h-8 ${
-                isInRange ? 'bg-[#007cc2]/10' : ''
-              } ${isRangeStart && normalizedEnd ? 'rounded-l-full bg-[#007cc2]/10' : ''} ${
-                isRangeEnd && normalizedStart ? 'rounded-r-full bg-[#007cc2]/10' : ''
+                isInRange ? 'bg-[#10b981]/15' : ''
+              } ${isRangeStart && normalizedEnd ? 'rounded-l-full bg-[#10b981]/15' : ''} ${
+                isRangeEnd && normalizedStart ? 'rounded-r-full bg-[#10b981]/15' : ''
               }`}
             >
               <button
@@ -337,11 +337,11 @@ export const MuiCalendar = ({
                   isDisabled
                     ? 'text-slate-300 opacity-40 cursor-not-allowed bg-transparent'
                     : isSelected
-                      ? 'bg-[#007cc2] text-white shadow-xs font-black ring-2 ring-[#007cc2]/30 scale-105 z-10 cursor-pointer'
+                      ? 'bg-linear-to-r from-[#10b981] to-[#059669] text-white shadow-xs font-black ring-2 ring-[#10b981]/30 scale-105 z-10 cursor-pointer'
                       : isToday
-                        ? 'border-2 border-[#007cc2] text-[#007cc2] hover:bg-sky-50 cursor-pointer'
+                        ? 'border-2 border-[#10b981] text-[#059669] hover:bg-emerald-50 cursor-pointer'
                         : isInRange
-                          ? 'text-[#007cc2] font-extrabold hover:bg-[#007cc2]/20 cursor-pointer'
+                          ? 'text-[#059669] font-extrabold hover:bg-[#10b981]/20 cursor-pointer'
                           : isCurrentMonth
                             ? 'text-slate-700 hover:bg-slate-100 hover:text-slate-900 cursor-pointer'
                             : 'text-slate-300 hover:bg-slate-50 cursor-pointer'
@@ -370,7 +370,7 @@ export const MuiCalendar = ({
             type='button'
             onClick={handleGoToToday}
             disabled={isDateDisabled(todayStr)}
-            className='inline-flex items-center gap-1 px-2.5 py-1 text-[#007cc2] hover:bg-[#007cc2]/10 disabled:opacity-40 disabled:cursor-not-allowed rounded-md font-bold transition-colors cursor-pointer'
+            className='inline-flex items-center gap-1 px-2.5 py-1 text-[#059669] hover:bg-emerald-50 disabled:opacity-40 disabled:cursor-not-allowed rounded-md font-bold transition-colors cursor-pointer'
           >
             <TodayIcon sx={{ fontSize: 13 }} />
             <span>Today</span>

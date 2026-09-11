@@ -66,7 +66,7 @@ export function useSchedulersQuery(params = {}, options = {}) {
       let totalResults = 0;
       let totalPages = 1;
 
-      // Fetch from dedicated Schedulers API (/v1/users/schedulers?page=...&limit=...)
+      // Fetch from dedicated Schedulers API (/v1/scheduler/schedulers?page=...&limit=...)
       try {
         const schedulersRes = await getSchedulersApi({ page, limit });
         const extracted = extractArray(schedulersRes, ['users', 'schedulers']);
@@ -81,7 +81,7 @@ export function useSchedulersQuery(params = {}, options = {}) {
             schedulersRes.totalPages ?? Math.ceil(totalResults / limit) ?? 1;
         }
       } catch (err) {
-        console.warn('Could not fetch from /v1/users/schedulers', err);
+        console.warn('Could not fetch from /v1/scheduler/schedulers', err);
       }
 
       // Normalize all scheduler records

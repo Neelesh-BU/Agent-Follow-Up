@@ -1,46 +1,47 @@
 export const APIMapping = {
-  // Auth APIs
+  // Auth Route
   login: '/v1/auth/login',
-  register: '/v1/auth/register',
   logout: '/v1/auth/logout',
-  me: '/v1/auth/me',
-  forgotPassword: '/v1/auth/password-reset/request',
-  resetPassword: '/v1/auth/password-reset/confirm',
+  passwordResetRequest: '/v1/auth/password-reset/request',
+  passwordResetConfirm: '/v1/auth/password-reset/confirm',
 
-  // Interviews APIs
-  interviews: '/v1/interviews',
-  interviewById: '/v1/interviews/{id}',
-  rescheduleInterview: '/v1/interviews/reschedule',
-  rescheduleInterviewById: '/v1/interviews/{id}/reschedule',
-  callNow: '/v1/interviews/{id}/call-now',
-  uploadCandidates: '/v1/interviews/upload',
-  exportCsv: '/v1/export/interviews.csv',
-  schedulerRun: '/v1/scheduler/run',
+  // Export Route
+  interviewExcel: '/v1/export/interviews.xlsx',
 
-  // Scheduler Management APIs
-  schedulers: '/v1/users/schedulers',
-  schedulerById: '/v1/users/schedulers/{id}',
-  inviteScheduler: '/v1/users/schedulers/{id}/invite',
-  activateScheduler: '/v1/users/schedulers/{id}/activate',
+  // Interview Route
+  createInterview: '/v1/interview/create-interview',
+  rescheduleInterview: '/v1/interview/reschedule',
+  updateInterview: '/v1/interview/:interviewId/update',
+  deleteInterview: '/v1/interview/:interviewId/delete',
+  callNow: '/v1/interview/:interviewId/call-now',
 
-  // User Profile & Session APIs
-  updateProfile: '/v1/users/me',
-  switchSessionUser: '/v1/users/session',
+  // Pipeline Route
+  listTableRecords: '/v1/pipeline/list-table-records',
+  viewTableRecord: '/v1/pipeline/view-table-records',
+  getPipelineFlow: '/v1/pipeline/pipeline-flow',
+  getSummaryCards: '/v1/pipeline/summary-cards',
 
-  // Jobs APIs
-  jobsList: '/v1/jobs/listJob',
-  companiesList: '/v1/jobs/listcompanies',
+  // Scheduler Route
+  getAccountsOverview: '/v1/scheduler/accounts-overview',
+  updateProfile: '/v1/scheduler/update-profile',
+  getSchedulers: '/v1/scheduler/get-schedulers',
+  resendInvite: '/v1/scheduler/:userId/invite',
+  activateScheduler: '/v1/scheduler/:userId/activate',
+  deleteScheduler: '/v1/scheduler/:userId/delete',
 
-  // Pipeline Details Table
-  pipelineListTable: '/v1/state/pipeline-table',
-  viewRecord: '/v1/state/view-record',
-  
-  // Dashboard Analytics APIs
-  summaryCards: '/v1/interviews/summary-cards',
-  pipelineFlow: '/v1/interviews/pipeline-flow',
+  // Job Route
+  jobsList: '/v1/jobs/job-list',
+  createJob: '/v1/jobs/job-create',
+  nextJobId: '/v1/jobs/next-id',
+  companiesList: '/v1/jobs/companies',
+  jobDetail: '/v1/jobs/:jobId/detail',
+  updateJob: '/v1/jobs/:jobId/update',
+  deleteJob: '/v1/jobs/:jobId/delete',
 
-  // Scheduler Accounts Overview
-  schedulerAccountsOverview: '/v1/scheduler/accounts-overview',
+  // Upload Route
+  uploadCandidates: '/v1/upload/upload-candidates',
+  getUploadHistory: '/v1/upload/history',
+  getUploadFailures: '/v1/upload/history/:uploadId/failures',
 };
 
 /**
@@ -49,8 +50,7 @@ export const APIMapping = {
  * @returns {string}
  */
 export function getAPIMap(name) {
-  const endpoint = APIMapping[name] || '';
-  return endpoint;
+  return APIMapping[name] || '';
 }
 
 export default getAPIMap;

@@ -68,7 +68,7 @@ export const DeactivateSchedulerModal = ({
           {/* Account Details Box */}
           <div className='p-4 bg-slate-50 border border-slate-200/80 rounded-xl flex flex-col gap-2.5'>
             <div className='flex items-center gap-2 text-xs font-black text-slate-800'>
-              <PersonOutlineIcon sx={{ fontSize: 16, color: '#007cc2' }} />
+              <PersonOutlineIcon sx={{ fontSize: 16, color: '#059669' }} />
               <span>{schedulerName}</span>
             </div>
             <div className='flex items-center gap-2 text-xs font-semibold text-slate-600'>

@@ -22,7 +22,7 @@ export const FollowUpToolbar = ({
         <button
           type='button'
           onClick={onOpenUploadModal}
-          className='h-10 px-3.5 bg-[#007cc2] hover:bg-[#006ca9] text-white text-xs font-bold rounded-xl inline-flex items-center gap-1.5 cursor-pointer transition-colors shadow-2xs'
+          className='h-10 px-3.5 bg-linear-to-r from-[#10b981] to-[#059669] hover:from-[#059669] hover:to-[#047857] text-white text-xs font-bold rounded-xl inline-flex items-center gap-1.5 cursor-pointer transition-all shadow-md shadow-[#10b981]/20'
         >
           <CloudUploadOutlinedIcon sx={{ fontSize: 17 }} />
           <span>{t('dashboard.uploadCandidate')}</span>
@@ -32,7 +32,7 @@ export const FollowUpToolbar = ({
         <button
           type='button'
           onClick={onOpenUploadHistory}
-          className='h-10 px-3.5 bg-white border border-[#007cc2] text-[#007cc2] hover:bg-sky-50 text-xs font-bold rounded-xl inline-flex items-center gap-1.5 cursor-pointer transition-colors shadow-2xs'
+          className='h-10 px-3.5 bg-white border border-[#10b981] text-[#059669] hover:bg-emerald-50 text-xs font-bold rounded-xl inline-flex items-center gap-1.5 cursor-pointer transition-colors shadow-2xs'
         >
           <HistoryIcon sx={{ fontSize: 17 }} />
           <span>History</span>
@@ -42,7 +42,7 @@ export const FollowUpToolbar = ({
         <button
           type='button'
           onClick={onAddManual}
-          className='h-10 px-4 bg-[#007cc2] hover:bg-[#006ca9] text-white text-xs font-extrabold rounded-xl inline-flex items-center gap-1.5 cursor-pointer transition-colors shadow-2xs'
+          className='h-10 px-4 bg-linear-to-r from-[#10b981] to-[#059669] hover:from-[#059669] hover:to-[#047857] text-white text-xs font-extrabold rounded-xl inline-flex items-center gap-1.5 cursor-pointer transition-all shadow-md shadow-[#10b981]/20'
         >
           <AddIcon sx={{ fontSize: 17 }} />
           <span>{t('dashboard.addManually')}</span>

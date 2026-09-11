@@ -341,7 +341,7 @@ export const AudioPlayerModal = ({
                     onClick={() => handleSpeedChange(speed)}
                     className={`w-full px-3 py-1.5 text-xs font-bold text-left flex items-center justify-between transition-colors cursor-pointer ${
                       playbackSpeed === speed
-                        ? 'bg-sky-50 text-[#007cc2]'
+                        ? 'bg-emerald-50 text-[#059669]'
                         : 'text-slate-700 hover:bg-slate-100'
                     }`}
                   >

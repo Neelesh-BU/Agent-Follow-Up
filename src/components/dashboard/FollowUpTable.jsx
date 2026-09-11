@@ -687,7 +687,7 @@ export const FollowUpTable = ({
                           candidateName: item.candidate_name,
                         })
                       }
-                      className='inline-flex items-center justify-center gap-1.5 px-3 py-1 font-bold text-[11px] rounded-lg transition-all border shadow-2xs cursor-pointer bg-sky-50 hover:bg-sky-100 text-[#007cc2] border-sky-200/80 hover:border-sky-300 active:scale-95'
+                      className='inline-flex items-center justify-center gap-1.5 px-3 py-1 font-bold text-[11px] rounded-lg transition-all border shadow-2xs cursor-pointer bg-emerald-50 hover:bg-emerald-100 text-[#059669] border-emerald-200/80 hover:border-emerald-300 active:scale-95'
                       title={t('common.recording', { defaultValue: 'Play call recording' })}
                     >
                       <GraphicEqIcon sx={{ fontSize: 15 }} />
@@ -719,7 +719,7 @@ export const FollowUpTable = ({
                         onClick={() =>
                           onMarkCompleted(item.id || item.record_id)
                         }
-                        className='px-2.5 py-1 bg-[#007cc2] hover:bg-[#006ca9] text-white text-[11px] font-extrabold rounded-lg shadow-xs inline-flex items-center gap-1 cursor-pointer transition-all shrink-0'
+                        className='px-2.5 py-1 bg-linear-to-r from-[#10b981] to-[#059669] hover:from-[#059669] hover:to-[#047857] text-white text-[11px] font-extrabold rounded-lg shadow-xs inline-flex items-center gap-1 cursor-pointer transition-all shrink-0'
                       >
                         <CheckCircleOutlineIcon sx={{ fontSize: 13 }} />
                         <span>{t('table.markCompleted')}</span>

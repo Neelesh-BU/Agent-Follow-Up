@@ -1,50 +1,24 @@
-import { useState, useRef } from 'react';
-import Popover from '@mui/material/Popover';
-import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
-import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
-import CheckIcon from '@mui/icons-material/Check';
-import MuiCalendar from './MuiCalendar';
+import { useState, useRef } from "react";
+import Popover from "@mui/material/Popover";
+import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
+import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
+import MuiCalendar from "./MuiCalendar";
+import MuiTimePicker, { isTimePast } from "./MuiTimePicker";
 import {
   displayDate,
   displayTime,
-  normalizeDateInputValue,
-  normalizeTimeInputValue,
-} from '@/utils/formatters';
+} from "@/utils/formatters";
 
-const COMMON_TIME_SLOTS = [
-  '09:00 AM',
-  '09:30 AM',
-  '10:00 AM',
-  '10:30 AM',
-  '11:00 AM',
-  '11:30 AM',
-  '12:00 PM',
-  '12:30 PM',
-  '01:00 PM',
-  '01:30 PM',
-  '02:00 PM',
-  '02:30 PM',
-  '03:00 PM',
-  '03:30 PM',
-  '04:00 PM',
-  '04:30 PM',
-  '05:00 PM',
-  '05:30 PM',
-  '06:00 PM',
-  '06:30 PM',
-  '07:00 PM',
-  '07:30 PM',
-  '08:00 PM',
-];
+export { isTimePast };
 
 /**
- * Custom DateTimePickerField using Material-UI Popover and MuiCalendar
- * Completely replaces native browser date/time popups with styled MUI pickers.
+ * Custom DateTimePickerField using Material-UI Popover, MuiCalendar, and MuiTimePicker
+ * Completely replaces native browser date/time popups with styled MUI pickers matching the project theme.
  */
 export const DateTimePickerField = ({
   id,
-  type = 'date', // 'date' | 'time'
-  value = '',
+  type = "date", // 'date' | 'time'
+  value = "",
   onChange,
   placeholder,
   disabled = false,
@@ -52,8 +26,10 @@ export const DateTimePickerField = ({
   readOnly = false,
   minDate,
   maxDate,
-  disablePastTime = false,
-  className = '',
+  selectedDate = "",
+  disablePastTime = true,
+  error = false,
+  className = "",
 }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const isOpen = Boolean(anchorEl);
@@ -70,55 +46,50 @@ export const DateTimePickerField = ({
 
   const handleDateSelect = (isoDate) => {
     if (!isoDate) {
-      onChange?.('');
+      onChange?.("");
     } else {
       onChange?.(displayDate(isoDate));
     }
     handleClose();
   };
 
-  const handleTimeSlotSelect = (timeSlot) => {
-    // Convert 12hr slot (e.g. "02:30 PM") to 24hr "14:30" or normalized format
-    const normalized = normalizeTimeInputValue(timeSlot);
-    onChange?.(normalized || timeSlot);
-    handleClose();
-  };
-
   const formattedDisplayValue =
-    type === 'date' ? (value ? displayDate(value) : '') : (value ? displayTime(value) : '');
+    type === "date" ? (value ? displayDate(value) : "") : (value ? displayTime(value) : "");
 
   return (
     <div
       ref={containerRef}
       className={`relative flex items-center border rounded-lg overflow-hidden bg-white transition-all ${
         disabled
-          ? 'opacity-60 bg-slate-50 border-slate-200 cursor-not-allowed'
-          : isOpen
-            ? 'border-[#007cc2] ring-2 ring-[#007cc2]/15'
-            : 'border-slate-300 hover:border-slate-400'
+          ? "opacity-60 bg-slate-50 border-slate-200 cursor-not-allowed"
+          : error
+            ? "border-rose-400 ring-2 ring-rose-100"
+            : isOpen
+              ? "border-[#10b981] ring-2 ring-[#10b981]/15"
+              : "border-slate-300 hover:border-slate-400"
       } ${className}`}
     >
       <input
         id={id}
-        type='text'
-        placeholder={placeholder || (type === 'date' ? 'DD-MM-YYYY' : 'HH:MM')}
+        type="text"
+        placeholder={placeholder || (type === "date" ? "DD-MM-YYYY" : "HH:MM")}
         value={formattedDisplayValue}
         onChange={(e) => onChange?.(e.target.value)}
         onClick={handleOpen}
         disabled={disabled}
         readOnly={readOnly}
         required={required}
-        className='w-full h-9 px-3 border-0 outline-none text-slate-800 text-xs font-semibold bg-transparent cursor-pointer'
+        className="w-full h-9 px-3 border-0 outline-none text-slate-800 text-xs font-semibold bg-transparent cursor-pointer"
       />
 
       <button
-        type='button'
-        aria-label='Open calendar'
+        type="button"
+        aria-label={type === "date" ? "Open calendar" : "Open time picker"}
         onClick={handleOpen}
         disabled={disabled || readOnly}
-        className='w-9 h-9 flex items-center justify-center border-l border-slate-200 bg-slate-50 hover:bg-slate-100 text-[#007cc2] disabled:cursor-not-allowed transition-colors cursor-pointer shrink-0'
+        className="w-9 h-9 flex items-center justify-center border-l border-slate-200 bg-slate-50 hover:bg-slate-100 text-[#059669] disabled:cursor-not-allowed transition-colors cursor-pointer shrink-0"
       >
-        {type === 'date' ? (
+        {type === "date" ? (
           <CalendarTodayOutlinedIcon sx={{ fontSize: 16 }} />
         ) : (
           <AccessTimeOutlinedIcon sx={{ fontSize: 16 }} />
@@ -130,29 +101,29 @@ export const DateTimePickerField = ({
         anchorEl={anchorEl}
         onClose={handleClose}
         anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
+          vertical: "bottom",
+          horizontal: "left",
         }}
         transformOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
+          vertical: "top",
+          horizontal: "left",
         }}
         slotProps={{
           paper: {
             sx: {
               mt: 0.5,
-              borderRadius: '14px',
+              borderRadius: "16px",
               boxShadow:
-                '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)',
-              border: '1px solid rgba(226, 232, 240, 0.9)',
-              overflow: 'hidden',
+                "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)",
+              border: "1px solid rgba(226, 232, 240, 0.9)",
+              overflow: "hidden",
             },
           },
         }}
       >
-        {type === 'date' ? (
+        {type === "date" ? (
           <MuiCalendar
-            mode='single'
+            mode="single"
             value={value}
             minDate={minDate}
             maxDate={maxDate}
@@ -160,41 +131,13 @@ export const DateTimePickerField = ({
             onClose={handleClose}
           />
         ) : (
-          <div className='p-2.5 bg-white w-52 max-h-64 overflow-y-auto custom-scrollbar flex flex-col gap-0.5'>
-            <div className='text-[10px] font-black uppercase tracking-wider text-slate-400 px-2.5 py-1 mb-1'>
-              Select Time
-            </div>
-            {COMMON_TIME_SLOTS.filter(slot => {
-              if (!disablePastTime) return true;
-              const [time, modifier] = slot.split(' ');
-              let [hours, minutes] = time.split(':').map(Number);
-              if (hours === 12) hours = modifier === 'PM' ? 12 : 0;
-              else if (modifier === 'PM') hours += 12;
-              
-              const slotTime = hours * 60 + minutes;
-              const now = new Date();
-              const currentTime = now.getHours() * 60 + now.getMinutes();
-              return slotTime > currentTime;
-            }).map((slot) => {
-              const normSlot = normalizeTimeInputValue(slot);
-              const isSelected = normSlot === normalizeTimeInputValue(value);
-              return (
-                <button
-                  key={slot}
-                  type='button'
-                  onClick={() => handleTimeSlotSelect(slot)}
-                  className={`w-full px-2.5 py-1.5 rounded-lg text-xs font-bold text-left flex items-center justify-between transition-colors cursor-pointer ${
-                    isSelected
-                      ? 'bg-[#007cc2] text-white shadow-xs'
-                      : 'text-slate-700 hover:bg-slate-100'
-                  }`}
-                >
-                  <span>{slot}</span>
-                  {isSelected && <CheckIcon sx={{ fontSize: 14 }} />}
-                </button>
-              );
-            })}
-          </div>
+          <MuiTimePicker
+            value={value}
+            onChange={onChange}
+            onDone={handleClose}
+            selectedDate={selectedDate}
+            disablePastTime={disablePastTime}
+          />
         )}
       </Popover>
     </div>

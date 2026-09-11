@@ -59,7 +59,6 @@ export const SchedulerAccountsPage = () => {
       const res = await addSchedulerMutation.mutateAsync(formData);
       showSuccess(res.message || t('schedulers.schedulerAddedSuccess'));
     } catch (err) {
-      console.log("errrrrrrrrrr===========>",err)
       showError(err.message || 'Unable to add scheduler');
       throw err;
     }
@@ -171,7 +170,7 @@ export const SchedulerAccountsPage = () => {
         accessorFn: (row) => row.email || row.emailId || '',
         header: t('schedulers.emailId', { defaultValue: 'EMAIL ID' }),
         Cell: ({ row }) => (
-          <div className='text-[#007cc2] font-semibold text-xs truncate'>
+          <div className='text-[#059669] font-semibold text-xs truncate'>
             {row.original.email || row.original.emailId || '-'}
           </div>
         ),
@@ -223,7 +222,7 @@ export const SchedulerAccountsPage = () => {
                   <button
                     type='button'
                     onClick={() => handleResendInvite(rowId)}
-                    className='px-3 py-1 bg-[#007cc2]/10 hover:bg-[#007cc2]/20 text-[#007cc2] text-[11px] font-bold rounded-lg transition-colors cursor-pointer'
+                    className='px-3 py-1 bg-emerald-50 hover:bg-emerald-100 text-[#059669] border border-emerald-200 text-[11px] font-bold rounded-lg transition-colors cursor-pointer'
                   >
                     {t('schedulers.resendLink', { defaultValue: 'Resend Link' })}
                   </button>
@@ -275,7 +274,7 @@ export const SchedulerAccountsPage = () => {
         <button
           type='button'
           onClick={() => setIsAddModalOpen(true)}
-          className='px-4 py-2.5 bg-[#007cc2] hover:bg-[#006ca9] text-white text-xs font-black rounded-xl inline-flex items-center gap-2 shadow-sm transition-colors cursor-pointer'
+          className='px-4 py-2.5 bg-linear-to-r from-[#10b981] to-[#059669] hover:from-[#059669] hover:to-[#047857] text-white text-xs font-black rounded-xl inline-flex items-center gap-2 shadow-md shadow-[#10b981]/25 transition-all cursor-pointer'
         >
           <PersonAddOutlinedIcon sx={{ fontSize: 18 }} />
           <span>{t('schedulers.addUser', { defaultValue: 'Add User' })}</span>

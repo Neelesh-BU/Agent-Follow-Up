@@ -5,6 +5,7 @@ export const PATHS = {
   RESET_PASSWORD: '/reset-password',
   DASHBOARD: '/dashboard',
   SCHEDULERS: '/schedulers',
+  JOBS: '/jobs',
   ACCOUNT: '/account',
   NOT_FOUND: '*',
 };

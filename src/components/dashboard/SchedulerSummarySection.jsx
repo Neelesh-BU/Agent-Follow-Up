@@ -87,7 +87,7 @@ export const SchedulerSummarySection = ({
                 defaultValue: 'Scheduler Accounts Overview',
               })}
             </span>
-            <span className='px-2 py-0.5 bg-[#007cc2]/10 text-[#007cc2] text-xs font-black rounded-full'>
+            <span className='px-2 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-black rounded-full'>
               {totalSchedulers}
             </span>
           </h2>
@@ -99,7 +99,7 @@ export const SchedulerSummarySection = ({
           <button
             type='button'
             onClick={onOpenUploadModal}
-            className='h-9 px-3.5 bg-[#007cc2] hover:bg-[#006ca9] text-white text-xs font-bold rounded-lg inline-flex items-center gap-1.5 cursor-pointer transition-colors shadow-2xs'
+            className='h-9 px-3.5 bg-linear-to-r from-[#10b981] to-[#059669] hover:from-[#059669] hover:to-[#047857] text-white text-xs font-bold rounded-lg inline-flex items-center gap-1.5 cursor-pointer transition-all shadow-md shadow-[#10b981]/20'
           >
             <CloudUploadOutlinedIcon sx={{ fontSize: 16 }} />
             <span>
@@ -113,7 +113,7 @@ export const SchedulerSummarySection = ({
           <button
             type='button'
             onClick={onOpenUploadHistory}
-            className='h-9 px-3.5 bg-white border border-[#007cc2] text-[#007cc2] hover:bg-sky-50 text-xs font-bold rounded-lg inline-flex items-center gap-1.5 cursor-pointer transition-colors shadow-2xs'
+            className='h-9 px-3.5 bg-white border border-[#10b981] text-[#059669] hover:bg-emerald-50 text-xs font-bold rounded-lg inline-flex items-center gap-1.5 cursor-pointer transition-colors shadow-2xs'
           >
             <HistoryIcon sx={{ fontSize: 16 }} />
             <span>History</span>
@@ -123,7 +123,7 @@ export const SchedulerSummarySection = ({
           <button
             type='button'
             onClick={onAddManual}
-            className='h-9 px-3.5 bg-[#007cc2] hover:bg-[#006ca9] text-white text-xs font-bold rounded-lg inline-flex items-center gap-1.5 cursor-pointer transition-colors shadow-2xs'
+            className='h-9 px-3.5 bg-linear-to-r from-[#10b981] to-[#059669] hover:from-[#059669] hover:to-[#047857] text-white text-xs font-bold rounded-lg inline-flex items-center gap-1.5 cursor-pointer transition-all shadow-md shadow-[#10b981]/20'
           >
             <PersonAddAlt1OutlinedIcon sx={{ fontSize: 16 }} />
             <span>
@@ -149,7 +149,7 @@ export const SchedulerSummarySection = ({
                 placeholder='Search scheduler...'
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className='w-full h-8.5 pl-8.5 pr-7 bg-white hover:bg-slate-50/80 focus:bg-white border border-slate-200 rounded-lg text-xs font-medium text-slate-800 placeholder-slate-400 outline-none focus:border-[#007cc2] transition-all'
+                className='w-full h-8.5 pl-8.5 pr-7 bg-white hover:bg-slate-50/80 focus:bg-white border border-slate-200 rounded-lg text-xs font-medium text-slate-800 placeholder-slate-400 outline-none focus:border-[#10b981] transition-all'
               />
               {search && (
                 <button
@@ -211,7 +211,7 @@ export const SchedulerSummarySection = ({
                             )}
                           </div>
                           <div className='min-w-0'>
-                            <h4 className='text-xs font-black text-slate-800 truncate group-hover:text-[#007cc2] transition-colors'>
+                            <h4 className='text-xs font-black text-slate-800 truncate group-hover:text-[#059669] transition-colors'>
                               {scheduler.scheduler_name ||
                                 t('dashboard.unnamedScheduler')}
                             </h4>
@@ -295,7 +295,7 @@ export const SchedulerSummarySection = ({
                         onClick={() => setPage(pageNum)}
                         className={`w-7 h-7 flex items-center justify-center rounded-lg text-xs font-black transition-all cursor-pointer ${
                           pageNum === safePage
-                            ? 'bg-[#007cc2] text-white shadow-2xs'
+                            ? 'bg-linear-to-r from-[#10b981] to-[#059669] text-white shadow-xs'
                             : 'text-slate-600 hover:bg-slate-200/70 border border-transparent'
                         }`}
                       >
@@ -328,7 +328,7 @@ export const SchedulerSummarySection = ({
                     setIsExpanded((prev) => !prev);
                     setPage(1);
                   }}
-                  className='inline-flex items-center gap-1 text-xs font-extrabold text-[#007cc2] hover:underline cursor-pointer py-1 px-3'
+                  className='inline-flex items-center gap-1 text-xs font-extrabold text-[#059669] hover:text-[#047857] hover:underline cursor-pointer py-1 px-3'
                 >
                   <span>
                     {isExpanded

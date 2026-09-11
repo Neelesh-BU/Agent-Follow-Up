@@ -220,7 +220,7 @@ export const DeleteFollowUpModal = ({
               {/* Assigned Scheduler */}
               {schedulerName && (
                 <div className='col-span-2 flex items-center gap-1.5 pt-1 text-slate-600 text-[11px] font-semibold'>
-                  <PersonOutlineIcon sx={{ fontSize: 14, color: '#007cc2' }} />
+                  <PersonOutlineIcon sx={{ fontSize: 14, color: '#059669' }} />
                   <span>
                     Scheduler: <strong className='text-slate-800'>{schedulerName}</strong>
                   </span>

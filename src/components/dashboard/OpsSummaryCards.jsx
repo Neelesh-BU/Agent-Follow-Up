@@ -40,8 +40,8 @@ export const OpsSummaryCards = ({
       badge: 'IN PROGRESS',
       icon: <TrendingUpIcon sx={{ fontSize: 16 }} />,
       theme: {
-        iconBg: 'bg-gradient-to-tr from-[#007cc2] to-[#38bdf8] text-white',
-        valueColor: 'text-[#007cc2]',
+        iconBg: 'bg-linear-to-tr from-sky-600 to-sky-400 text-white',
+        valueColor: 'text-sky-600',
         badgeBg: 'bg-sky-100/80 text-sky-700',
         border: 'border-sky-200/60',
         hoverShadow: 'hover:shadow-md hover:shadow-sky-500/20 hover:border-sky-300',

@@ -10,7 +10,7 @@ import MailOutlineIcon from '@mui/icons-material/MailOutlineOutlined';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutlineOutlined';
 import useAuth from '@/hooks/useAuth';
 import useNotification from '@/hooks/useNotification';
-import useAuthMutations from '@/hooks/queries/useAuthQueries';
+import { loginApi } from '@/services/api/authService';
 import PATHS from '@/routes/paths';
 import { normalizeUser } from '@/utils/roles';
 
@@ -18,7 +18,6 @@ export const LoginPage = () => {
   const { t } = useTranslation();
   const { login } = useAuth();
   const { showSuccess } = useNotification();
-  const { loginMutation } = useAuthMutations();
   const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
@@ -42,7 +41,7 @@ export const LoginPage = () => {
     onSubmit: async (values, { setSubmitting }) => {
       setErrorMsg('');
       try {
-        const authResult = await loginMutation.mutateAsync(values);
+        const authResult = await loginApi(values);
 
         // Extract user and token from response
         const userObj = authResult?.user || authResult?.data?.user;
@@ -74,8 +73,8 @@ export const LoginPage = () => {
     <div className='flex flex-col animate-in fade-in duration-500 delay-150 fill-mode-both'>
       {/* Brand header */}
       <div className='flex items-center gap-2 mb-2 animate-in slide-in-from-bottom-2 duration-500 delay-200 fill-mode-both'>
-        <span className='h-2 w-2 rounded-full bg-[#007cc2] animate-pulse'></span>
-        <span className='text-[#007cc2] text-xs font-black tracking-wider uppercase'>
+        <span className='h-2 w-2 rounded-full bg-[#10b981] animate-pulse'></span>
+        <span className='text-[#059669] text-xs font-black tracking-wider uppercase'>
           {t('auth.portalEyebrow')}
         </span>
       </div>
@@ -128,7 +127,7 @@ export const LoginPage = () => {
               className={`w-full h-11 pl-10 pr-3.5 border rounded-xl text-xs font-semibold text-slate-800 outline-none transition-all duration-300 ${
                 formik.touched.email && formik.errors.email
                   ? 'border-rose-400 focus:border-rose-500 bg-rose-50/20'
-                  : 'border-slate-200 focus:border-[#007cc2] focus:ring-4 focus:ring-[#007cc2]/10 bg-slate-50 hover:bg-white focus:bg-white'
+                  : 'border-slate-200 focus:border-[#10b981] focus:ring-4 focus:ring-[#10b981]/10 bg-slate-50 hover:bg-white focus:bg-white'
               }`}
             />
           </div>
@@ -164,7 +163,7 @@ export const LoginPage = () => {
               className={`w-full h-11 pl-10 pr-10 border rounded-xl text-xs font-semibold text-slate-800 outline-none transition-all duration-300 ${
                 formik.touched.password && formik.errors.password
                   ? 'border-rose-400 focus:border-rose-500 bg-rose-50/20'
-                  : 'border-slate-200 focus:border-[#007cc2] focus:ring-4 focus:ring-[#007cc2]/10 bg-slate-50 hover:bg-white focus:bg-white'
+                  : 'border-slate-200 focus:border-[#10b981] focus:ring-4 focus:ring-[#10b981]/10 bg-slate-50 hover:bg-white focus:bg-white'
               }`}
             />
             <button
@@ -190,7 +189,7 @@ export const LoginPage = () => {
         <button
           type='submit'
           disabled={formik.isSubmitting}
-          className='h-11 mt-2 bg-linear-to-r from-[#007cc2] to-[#006ca9] hover:from-[#006ca9] hover:to-[#005a8f] disabled:opacity-60 text-white font-extrabold text-xs rounded-xl shadow-[0_8px_16px_-4px_rgba(0,124,194,0.3)] hover:shadow-[0_12px_20px_-4px_rgba(0,124,194,0.4)] transition-all duration-300 active:scale-[0.98] cursor-pointer flex items-center justify-center gap-2'
+          className='h-11 mt-2 bg-[#1e3a34] hover:bg-[#152e29] active:scale-[0.98] disabled:opacity-60 text-white font-extrabold text-xs rounded-xl shadow-[0_8px_20px_-4px_rgba(30,58,52,0.35)] transition-all duration-300 cursor-pointer flex items-center justify-center gap-2'
         >
           {formik.isSubmitting ? (
             <>
@@ -207,14 +206,14 @@ export const LoginPage = () => {
       <div className='mt-3.5 text-right animate-in fade-in duration-500 delay-[600ms] fill-mode-both'>
         <Link
           to={PATHS.FORGOT_PASSWORD}
-          className='text-xs font-bold text-[#007cc2] hover:underline'
+          className='text-xs font-bold text-[#059669] hover:text-[#047857] hover:underline'
         >
           {t('auth.forgotPassword')}
         </Link>
       </div>
 
       {/* Info Notice */}
-      <div className='mt-6 p-3.5 bg-slate-50/80 border border-slate-200/80 rounded-xl text-[11px] font-medium text-slate-500 leading-relaxed animate-in fade-in duration-500 delay-[700ms] fill-mode-both'>
+      <div className='mt-6 p-3.5 bg-emerald-50/70 border border-emerald-200/80 rounded-xl text-[11px] font-medium text-emerald-800 leading-relaxed animate-in fade-in duration-500 delay-[700ms] fill-mode-both'>
         {t('auth.loginNoticeAuthorized')}
       </div>
     </div>

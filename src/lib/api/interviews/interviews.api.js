@@ -9,8 +9,10 @@ import {
  * Fetch Summary Cards
  */
 export async function getSummaryCardsApi(params = {}) {
+  const base = getAPIMap("summaryCards");
+  if (!base) return {};
   const query = buildStateParams(params);
-  const url = `${getAPIMap("summaryCards")}${query}`;
+  const url = `${base}${query}`;
   const response = await api.get(url);
   return response.data;
 }
@@ -19,8 +21,10 @@ export async function getSummaryCardsApi(params = {}) {
  * Fetch Pipeline Flow
  */
 export async function getPipelineFlowApi(params = {}) {
+  const base = getAPIMap("pipelineFlow");
+  if (!base) return {};
   const query = buildStateParams(params);
-  const url = `${getAPIMap("pipelineFlow")}${query}`;
+  const url = `${base}${query}`;
   const response = await api.get(url);
   return response.data;
 }
@@ -29,7 +33,9 @@ export async function getPipelineFlowApi(params = {}) {
  * Create Interview Record
  */
 export async function createInterviewApi(payload) {
-  const response = await api.post(getAPIMap("interviews"), payload);
+  const url = getAPIMap("interviews");
+  if (!url) return {};
+  const response = await api.post(url, payload);
   return response.data;
 }
 
@@ -37,7 +43,9 @@ export async function createInterviewApi(payload) {
  * Update Interview Record
  */
 export async function updateInterviewApi({ id, payload }) {
-  const url = getAPIMap("interviewById").replace("{id}", id);
+  const endpoint = getAPIMap("updateInterview") || (getAPIMap("interviewById") ? `${getAPIMap("interviewById")}/update` : "");
+  if (!endpoint) return {};
+  const url = endpoint.replace("{id}", id);
   const response = await api.patch(url, payload);
   return response.data;
 }
@@ -104,7 +112,9 @@ export async function rescheduleInterviewApi({ id, payload }) {
  * Delete Interview Record
  */
 export async function deleteInterviewApi(id) {
-  const url = getAPIMap("interviewById").replace("{id}", id);
+  const endpoint = getAPIMap("deleteInterview") || (getAPIMap("interviewById") ? `${getAPIMap("interviewById")}/delete` : "");
+  if (!endpoint) return {};
+  const url = endpoint.replace("{id}", id);
   const response = await api.delete(url);
   return response.data;
 }
@@ -113,7 +123,9 @@ export async function deleteInterviewApi(id) {
  * Trigger Immediate Call
  */
 export async function callNowApi(id) {
-  const url = getAPIMap("callNow").replace("{id}", id);
+  const endpoint = getAPIMap("callNow");
+  if (!endpoint) return {};
+  const url = endpoint.replace("{id}", id);
   const response = await api.post(url);
   return response.data;
 }
@@ -122,8 +134,10 @@ export async function callNowApi(id) {
  * Upload candidate roster (CSV/Excel)
  */
 export async function uploadCandidatesApi({ file, schedulerId }) {
+  const url = getAPIMap("uploadCandidates");
+  if (!url) return { success_count: 0 };
   const formData = buildCandidateUploadFormData(file, schedulerId);
-  const response = await api.post(getAPIMap("uploadCandidates"), formData, {
+  const response = await api.post(url, formData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
@@ -135,7 +149,9 @@ export async function uploadCandidatesApi({ file, schedulerId }) {
  * Run scheduler batch
  */
 export async function runSchedulerApi() {
-  const response = await api.post(getAPIMap("schedulerRun"));
+  const url = getAPIMap("schedulerRun");
+  if (!url) return {};
+  const response = await api.post(url);
   return response.data;
 }
 
@@ -143,15 +159,19 @@ export async function runSchedulerApi() {
  * Helper to get export CSV URL
  */
 export function getExportUrl(params = {}) {
+  const endpoint = getAPIMap("exportCsv");
+  if (!endpoint) return "#";
   const query = buildStateParams(params);
   const baseUrl = import.meta.env.VITE_API_BASE_URL || "/api";
-  return `${baseUrl}${getAPIMap("exportCsv")}${query}`;
+  return `${baseUrl}${endpoint}${query}`;
 }
 
 /**
  * Get Pipeline Table Data
  */
 export async function pipelineListTable(params = {}) {
+  const base = getAPIMap("pipelineListTable");
+  if (!base) return { pipeline_list: [], totalResults: 0 };
   const queryParams = new URLSearchParams();
   if (params.tab !== undefined && params.tab !== null) {
     queryParams.append("tab", params.tab);
@@ -177,7 +197,7 @@ export async function pipelineListTable(params = {}) {
   const queryString = queryParams.toString()
     ? `?${queryParams.toString()}`
     : "";
-  const url = `${getAPIMap("pipelineListTable")}${queryString}`;
+  const url = `${base}${queryString}`;
   const response = await api.get(url);
   return response.data;
 }
@@ -187,7 +207,9 @@ export async function pipelineListTable(params = {}) {
  */
 export async function getViewRecordApi(id) {
   if (!id) return null;
-  const url = `${getAPIMap("viewRecord")}?id=${encodeURIComponent(id)}`;
+  const base = getAPIMap("viewRecord");
+  if (!base) return null;
+  const url = `${base}?id=${encodeURIComponent(id)}`;
   const response = await api.get(url);
   return response.data;
 }

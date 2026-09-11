@@ -181,7 +181,7 @@ export const UploadCandidateModal = ({
         {/* Header */}
         <div className='flex items-center justify-between px-6 py-4.5 border-b border-slate-100 bg-slate-50/70'>
           <div className='flex items-center gap-2.5'>
-            <div className='w-9 h-9 rounded-xl bg-[#007cc2]/10 text-[#007cc2] flex items-center justify-center shrink-0'>
+            <div className='w-9 h-9 rounded-xl bg-emerald-50 border border-emerald-200 text-[#059669] flex items-center justify-center shrink-0'>
               <CloudUploadOutlinedIcon sx={{ fontSize: 20 }} />
             </div>
             <div>
@@ -264,15 +264,15 @@ export const UploadCandidateModal = ({
                 onClick={() => fileInputRef.current?.click()}
                 className={`border-2 border-dashed rounded-2xl p-6 text-center transition-all cursor-pointer flex flex-col items-center justify-center gap-2.5 ${
                   isDragging
-                    ? 'border-[#007cc2] bg-sky-50/60 scale-[0.99]'
-                    : 'border-slate-300 hover:border-[#007cc2] hover:bg-slate-50/60 bg-slate-50/30'
+                    ? 'border-[#10b981] bg-emerald-50/60 scale-[0.99]'
+                    : 'border-slate-300 hover:border-[#10b981] hover:bg-emerald-50/30 bg-slate-50/30'
                 }`}
               >
-                <div className='w-12 h-12 rounded-2xl bg-white border border-slate-200 shadow-2xs flex items-center justify-center text-[#007cc2]'>
+                <div className='w-12 h-12 rounded-2xl bg-white border border-slate-200 shadow-2xs flex items-center justify-center text-[#059669]'>
                   <CloudUploadOutlinedIcon sx={{ fontSize: 28 }} />
                 </div>
                 <div>
-                  <span className='text-xs font-bold text-[#007cc2] hover:underline'>
+                  <span className='text-xs font-bold text-[#059669] hover:underline'>
                     Click to browse
                   </span>{' '}
                   <span className='text-xs text-slate-500 font-medium'>
@@ -293,9 +293,9 @@ export const UploadCandidateModal = ({
               </div>
             ) : (
               /* Selected File Preview Box */
-              <div className='p-3.5 bg-sky-50/60 border border-sky-200 rounded-2xl flex items-center justify-between gap-3 animate-in fade-in zoom-in-95 duration-150'>
+              <div className='p-3.5 bg-emerald-50/60 border border-emerald-200 rounded-2xl flex items-center justify-between gap-3 animate-in fade-in zoom-in-95 duration-150'>
                 <div className='flex items-center gap-3 min-w-0'>
-                  <div className='w-10 h-10 rounded-xl bg-[#007cc2] text-white flex items-center justify-center shrink-0 shadow-xs'>
+                  <div className='w-10 h-10 rounded-xl bg-linear-to-tr from-[#10b981] to-[#059669] text-white flex items-center justify-center shrink-0 shadow-xs'>
                     <InsertDriveFileOutlinedIcon sx={{ fontSize: 20 }} />
                   </div>
                   <div className='min-w-0'>
@@ -347,7 +347,7 @@ export const UploadCandidateModal = ({
             <button
               type='submit'
               disabled={isSubmitting || !selectedFile}
-              className='px-5 py-2.5 bg-[#007cc2] hover:bg-[#006ca9] disabled:opacity-50 text-white rounded-xl font-bold text-xs shadow-md transition-all cursor-pointer inline-flex items-center gap-2'
+              className='px-5 py-2.5 bg-linear-to-r from-[#10b981] to-[#059669] hover:from-[#059669] hover:to-[#047857] disabled:opacity-50 text-white rounded-xl font-bold text-xs shadow-md shadow-[#10b981]/25 transition-all cursor-pointer inline-flex items-center gap-2'
             >
               {isSubmitting ? (
                 <>

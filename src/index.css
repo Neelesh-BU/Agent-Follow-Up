@@ -2,13 +2,13 @@
 @import 'tailwindcss';
 
 :root {
-  --curatal: #007cc2;
-  --curatal-dark: #006ca9;
-  --curatal-light: #e6f7ff;
-  --curatal-border: #dbe7f2;
+  --agent: #10b981;
+  --agent-dark: #059669;
+  --agent-light: #ecfdf5;
+  --agent-border: #a7f3d0;
   --ink: #0f172a;
   --muted: #64748b;
-  --canvas: #f8fafc;
+  --canvas: #f6fbf8;
   --surface: #ffffff;
   --line: #e2e8f0;
   --green: #10b981;
@@ -122,7 +122,7 @@
 
 /* Blob Animation Button (applied exclusively to Refresh button) */
 .refresh-blob-btn {
-  --blob-color: #007cc2;
+  --blob-color: #10b981;
   --blob-dark: #ffffff;
   --blob-border-w: 2px;
   z-index: 1;
@@ -258,3 +258,19 @@
     transform: translateZ(0) scale(1.4);
   }
 }
+
+.custom-time-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+.custom-time-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+.custom-time-scroll::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 4px;
+}
+.custom-time-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+

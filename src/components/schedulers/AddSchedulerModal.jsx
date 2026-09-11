@@ -86,7 +86,7 @@ export const AddSchedulerModal = ({
               onChange={(e) =>
                 setFormData({ ...formData, name: e.target.value })
               }
-              className="h-10 px-3 border border-slate-300 rounded-lg text-xs font-semibold text-slate-800 outline-none focus:border-[#007cc2]"
+              className="h-10 px-3 border border-slate-300 rounded-lg text-xs font-semibold text-slate-800 outline-none focus:border-[#10b981]"
             />
           </div>
 
@@ -102,7 +102,7 @@ export const AddSchedulerModal = ({
               onChange={(e) =>
                 setFormData({ ...formData, email: e.target.value })
               }
-              className="h-10 px-3 border border-slate-300 rounded-lg text-xs font-semibold text-slate-800 outline-none focus:border-[#007cc2]"
+              className="h-10 px-3 border border-slate-300 rounded-lg text-xs font-semibold text-slate-800 outline-none focus:border-[#10b981]"
             />
           </div>
 
@@ -143,7 +143,7 @@ export const AddSchedulerModal = ({
                   formData.phoneNumber.length > 0 &&
                   formData.phoneNumber.length < 10
                     ? "border-amber-400 focus:border-amber-500"
-                    : "border-slate-300 focus:border-[#007cc2]"
+                    : "border-slate-300 focus:border-[#10b981]"
                 }`}
               />
             </div>
@@ -160,7 +160,7 @@ export const AddSchedulerModal = ({
             <button
               type="submit"
               disabled={isSubmitting || !isFormValid}
-              className="px-5 py-2 bg-[#007cc2] hover:bg-[#006ca9] disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-lg font-bold text-xs shadow-md transition-colors cursor-pointer"
+              className="px-5 py-2.5 bg-linear-to-r from-[#10b981] to-[#059669] hover:from-[#059669] hover:to-[#047857] disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-xl font-bold text-xs shadow-md shadow-[#10b981]/25 transition-all cursor-pointer"
             >
               {isSubmitting ? t("common.submitting") : t("schedulers.addUser")}
             </button>

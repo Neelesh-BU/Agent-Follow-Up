@@ -1,6 +1,6 @@
 {
   "common": {
-    "appName": "Curatal Scheduler Follow Up",
+    "appName": "Agent Follow up",
     "appTagline": "Candidate follow-up pipeline",
     "loading": "Loading...",
     "save": "Save",
@@ -28,10 +28,10 @@
   "auth": {
     "welcome": "Welcome back",
     "signInSubtitle": "Enter your authorized email ID and password to continue.",
-    "portalEyebrow": "Candidate Follow up portal",
-    "heroTitle": "Intelligent follow-ups.",
-    "heroSubtitleHighlight": "Smarter hiring.",
-    "heroDescription": "Automate WhatsApp reminders, call follow-ups, and scheduling to engage candidates at the right time.",
+    "portalEyebrow": "Agent Follow up portal",
+    "heroTitle": "Agent follow-ups.",
+    "heroSubtitleHighlight": "Automated Call Reminders.",
+    "heroDescription": "Automate call follow-ups,  and scheduling to engage candidates at the right time.",
     "featureEngagementTitle": "Better Engagement",
     "featureEngagementSubtitle": "Reach candidates at the right time",
     "featureSaveTimeTitle": "Save Time",
@@ -41,7 +41,7 @@
     "pipelineHeroTitle": "Candidate follow-up pipeline",
     "pipelineHeroSubtitle": "WhatsApp, reminders, and scheduler actions moving in one simple loop.",
     "email": "Email ID",
-    "emailPlaceholder": "name@curatal.com",
+    "emailPlaceholder": "name@agent.com",
     "password": "Password",
     "passwordPlaceholder": "Enter password",
     "signIn": "Login",
@@ -82,7 +82,9 @@
     "schedulerAccounts": "Scheduler Accounts",
     "accountManagement": "Account Management",
     "logout": "Log out",
-    "allSchedulers": "All Schedulers"
+    "loggingOut": "Logging out...",
+    "allSchedulers": "All Schedulers",
+    "jobs": "Jobs & Roles"
   },
   "dashboard": {
     "pageTitleScheduler": "Scheduler Follow Up",
@@ -296,7 +298,7 @@
     "schedulerName": "Scheduler Name",
     "schedulerNamePlaceholder": "Scheduler name",
     "schedulerEmail": "Scheduler Email ID",
-    "schedulerEmailPlaceholder": "name@curatal.com",
+    "schedulerEmailPlaceholder": "name@agent.com",
     "countryCode": "Country Code",
     "countryCodePlaceholder": "+91",
     "schedulerPhone": "Phone Number",
@@ -367,5 +369,28 @@
     "subtitle": "Replay the original conversation recording",
     "speed": "Speed",
     "download": "Download"
+  },
+  "jobs": {
+    "pageTitle": "Job Openings & Roles",
+    "pageSubtitle": "Manage master job IDs, company roles, and follow-up templates",
+    "addJobBtn": "Add New Job",
+    "addJobSidePanelTitle": "Create New Job",
+    "addJobSidePanelSubtitle": "Add a new job opening with a unique integer ID",
+    "jobIdLabel": "Unique Job ID",
+    "customIdToggle": "Manual ID",
+    "autoAssignedHint": "Next integer ID will be assigned automatically",
+    "customIdWarning": "Must be a unique integer not already in use",
+    "jobTitle": "Job Title",
+    "companyName": "Company Name",
+    "department": "Department",
+    "location": "Location",
+    "jobType": "Employment Type",
+    "status": "Initial Status",
+    "description": "Job Description / Notes",
+    "saveJob": "Create Job",
+    "createdSuccess": "Job #{{id}} created successfully!",
+    "titleRequired": "Job title is required",
+    "companyRequired": "Company name is required",
+    "invalidJobId": "Job ID must be a positive integer"
   }
 }

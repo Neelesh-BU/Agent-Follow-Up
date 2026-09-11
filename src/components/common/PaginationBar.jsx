@@ -73,9 +73,9 @@ export const PaginationBar = ({
               key={`btn-${item}`}
               type='button'
               onClick={() => onPageChange(item)}
-              className={`w-7 h-7 flex items-center justify-center rounded-full text-xs font-bold transition-colors ${
+              className={`w-7 h-7 flex items-center justify-center rounded-full text-xs font-bold transition-all ${
                 item === currentPage
-                  ? 'bg-[#007cc2] text-white shadow-sm'
+                  ? 'bg-linear-to-r from-[#10b981] to-[#059669] text-white shadow-xs'
                   : 'text-slate-700 hover:bg-slate-100'
               }`}
             >
@@ -106,7 +106,7 @@ export const PaginationBar = ({
               const val = Number(e.target.value);
               if (val >= 1 && val <= totalPages) onPageChange(val);
             }}
-            className='w-12 h-7 px-1.5 border border-slate-300 rounded text-center text-xs font-bold text-slate-800 outline-none focus:border-[#007cc2]'
+            className='w-12 h-7 px-1.5 border border-slate-300 rounded text-center text-xs font-bold text-slate-800 outline-none focus:border-[#10b981]'
           />
           <span>{t('pagination.page')}</span>
         </div>

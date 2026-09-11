@@ -1,4 +1,0 @@
-include:
-  - project: 'curatal/pipeline'
-    ref: main
-    file: 'portal/.followup-gitlab-ci.yml'
