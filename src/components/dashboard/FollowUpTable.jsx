@@ -717,7 +717,7 @@ export const FollowUpTable = ({
                       <button
                         type='button'
                         onClick={() =>
-                          onMarkCompleted(item.id || item.record_id)
+                          onMarkCompleted(item.id || item.record_id || item)
                         }
                         className='px-2.5 py-1 bg-linear-to-r from-[#10b981] to-[#059669] hover:from-[#059669] hover:to-[#047857] text-white text-[11px] font-extrabold rounded-lg shadow-xs inline-flex items-center gap-1 cursor-pointer transition-all shrink-0'
                       >
@@ -729,7 +729,7 @@ export const FollowUpTable = ({
                     {!locked && (
                       <button
                         type='button'
-                        onClick={() => onCallNow(item.id || item.record_id)}
+                        onClick={() => onCallNow(item.id || item.record_id || item)}
                         className='px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-extrabold rounded-lg shadow-xs hover:shadow-md inline-flex items-center gap-1 cursor-pointer transition-all shrink-0'
                       >
                         <CallIcon sx={{ fontSize: 12 }} />

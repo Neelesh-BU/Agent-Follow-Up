@@ -72,6 +72,7 @@ export const buildInterviewPayload = (formData, { isMaster = false } = {}) => {
     scheduled_time: scheduledTime,
     schedule_date: scheduledDate,
     schedule_time: scheduledTime,
+    interview_date: normInterviewDate || scheduledDate || '',
     interview_time:
       rescheduleIso && formData.response === 'reschedule'
         ? rescheduleIso
@@ -85,9 +86,10 @@ export const buildInterviewPayload = (formData, { isMaster = false } = {}) => {
     reason: formData.reason || '',
     audio_url: formData.audio_url || '',
     notes: formData.notes || '',
+    followup_upload_type: 'manual_upload',
   };
 
-  if (isMaster && formData.scheduler_id) {
+  if (formData.scheduler_id) {
     payload.scheduler_id = formData.scheduler_id;
   }
 

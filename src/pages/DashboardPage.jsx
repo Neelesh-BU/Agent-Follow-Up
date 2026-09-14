@@ -34,6 +34,7 @@ import FollowUpDetailModal from '@/components/dashboard/FollowUpDetailModal';
 import DeleteFollowUpModal from '@/components/dashboard/DeleteFollowUpModal';
 import UploadCandidateModal from '@/components/dashboard/UploadCandidateModal';
 import UploadHistoryModal from '@/components/dashboard/UploadHistoryModal';
+import DashboardSkeleton from '@/components/dashboard/DashboardSkeleton';
 
 // Common Components
 import MuiDateRangePicker from '@/components/common/MuiDateRangePicker';
@@ -131,12 +132,19 @@ const DashboardPage = () => {
     isLoading: tableLoading,
     isFetching: tableFetching,
   } = usePipelineTableQuery(tableParams);
-  const { data: schedulersData } = useSchedulersQuery({ enabled: isMaster });
+  const { data: schedulersData, isLoading: schedulersLoading } = useSchedulersQuery({ enabled: isMaster });
+
+  const isPageLoading =
+    summaryLoading ||
+    flowLoading ||
+    tableLoading ||
+    Boolean(isMaster && schedulersLoading);
 
   // ── Mutations ────────────────────────────────────────────────────────────
   const {
     createInterviewMutation,
     updateInterviewMutation,
+    rescheduleInterviewMutation,
     deleteInterviewMutation,
     callNowMutation,
     uploadCandidatesMutation,
@@ -168,12 +176,19 @@ const DashboardPage = () => {
 
   const tableRows = useMemo(() => {
     if (!tableData) return [];
-    return tableData.rows ?? tableData.records ?? tableData.data ?? [];
+    return (
+      tableData.pipeline_list ??
+      tableData.rows ??
+      tableData.records ??
+      tableData.data ??
+      []
+    );
   }, [tableData]);
 
   const totalRows = useMemo(() => {
     if (!tableData) return 0;
     return (
+      tableData.totalResults ??
       tableData.total ??
       tableData.totalRows ??
       tableData.totalCount ??
@@ -213,12 +228,20 @@ const DashboardPage = () => {
 
   const handleCallNow = useCallback(
     async (row) => {
-      const id = row.id || row.record_id || row._id;
+      const id =
+        typeof row === 'string'
+          ? row
+          : row?.id || row?.record_id || row?._id;
       if (!id) return;
       try {
-        await callNowMutation.mutateAsync({ id });
+        await callNowMutation.mutateAsync(id);
       } catch (err) {
         console.error('Call now error:', err);
+        alert(
+          err?.response?.data?.message ||
+            err?.message ||
+            'Failed to initiate call.',
+        );
       }
     },
     [callNowMutation],
@@ -226,7 +249,10 @@ const DashboardPage = () => {
 
   const handleMarkCompleted = useCallback(
     async (row) => {
-      const id = row.id || row.record_id || row._id;
+      const id =
+        typeof row === 'string'
+          ? row
+          : row?.id || row?.record_id || row?._id;
       if (!id) return;
       try {
         await updateInterviewMutation.mutateAsync({
@@ -235,6 +261,11 @@ const DashboardPage = () => {
         });
       } catch (err) {
         console.error('Mark completed error:', err);
+        alert(
+          err?.response?.data?.message ||
+            err?.message ||
+            'Failed to mark record as completed.',
+        );
       }
     },
     [updateInterviewMutation],
@@ -259,22 +290,37 @@ const DashboardPage = () => {
   }, [deleteModal.record, deleteInterviewMutation]);
 
   const handleSaveDetail = useCallback(
-    async (payload) => {
+    async (payload, effectiveId, options = {}) => {
       try {
         const isNew =
           !detailModal.data?.id && !detailModal.data?.record_id;
         if (isNew) {
           await createInterviewMutation.mutateAsync(payload);
+        } else if (options?.isReschedule) {
+          const id =
+            effectiveId || detailModal.data.id || detailModal.data.record_id;
+          await rescheduleInterviewMutation.mutateAsync({ id, payload });
         } else {
-          const id = detailModal.data.id || detailModal.data.record_id;
+          const id =
+            effectiveId || detailModal.data.id || detailModal.data.record_id;
           await updateInterviewMutation.mutateAsync({ id, payload });
         }
         setDetailModal({ open: false, data: null });
       } catch (err) {
         console.error('Save error:', err);
+        alert(
+          err?.response?.data?.message ||
+            err?.message ||
+            'Failed to save candidate details.',
+        );
       }
     },
-    [detailModal.data, createInterviewMutation, updateInterviewMutation],
+    [
+      detailModal.data,
+      createInterviewMutation,
+      updateInterviewMutation,
+      rescheduleInterviewMutation,
+    ],
   );
 
   const handleUpload = useCallback(
@@ -292,7 +338,11 @@ const DashboardPage = () => {
 
   return (
     <div className='w-full min-h-full'>
-      {/* ── DASHBOARD HEADER ─────────────────────────────────────────────── */}
+      {isPageLoading ? (
+        <DashboardSkeleton isMaster={isMaster} />
+      ) : (
+        <>
+          {/* ── DASHBOARD HEADER ─────────────────────────────────────────────── */}
       <div className='mb-5 sm:mb-7'>
         {/* Greeting row */}
         <div className='flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4 mb-4'>
@@ -596,6 +646,8 @@ const DashboardPage = () => {
           )}
         </div>
       </section>
+        </>
+      )}
 
       {/* ── MODALS ───────────────────────────────────────────────────────── */}
 
@@ -613,7 +665,8 @@ const DashboardPage = () => {
         isMaster={isMaster}
         isLoading={
           createInterviewMutation.isPending ||
-          updateInterviewMutation.isPending
+          updateInterviewMutation.isPending ||
+          rescheduleInterviewMutation.isPending
         }
       />
 

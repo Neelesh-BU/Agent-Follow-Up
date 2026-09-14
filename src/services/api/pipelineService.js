@@ -6,7 +6,11 @@ import { getAPIMap } from '@/routes/ApiUrls';
  * @param {Object} params - { tab, page, limit, scheduler_id, search, from, to }
  */
 export const listTableRecordsApi = async (params = {}) => {
-  const response = await api.get(getAPIMap('listTableRecords'), { params });
+  const url =
+    getAPIMap('listTableRecords') ||
+    getAPIMap('pipelineListTable') ||
+    '/v1/pipeline/list-table-records';
+  const response = await api.get(url, { params });
   return response.data;
 };
 
@@ -16,7 +20,11 @@ export const listTableRecordsApi = async (params = {}) => {
  */
 export const viewTableRecordApi = async (params = {}) => {
   const queryParams = typeof params === 'string' ? { id: params } : params;
-  const response = await api.get(getAPIMap('viewTableRecord'), { params: queryParams });
+  const url =
+    getAPIMap('viewTableRecord') ||
+    getAPIMap('viewRecord') ||
+    '/v1/pipeline/view-table-records';
+  const response = await api.get(url, { params: queryParams });
   return response.data;
 };
 
@@ -25,7 +33,11 @@ export const viewTableRecordApi = async (params = {}) => {
  * @param {Object} params - { scheduler_id, search, from, to }
  */
 export const getPipelineFlowApi = async (params = {}) => {
-  const response = await api.get(getAPIMap('getPipelineFlow'), { params });
+  const url =
+    getAPIMap('getPipelineFlow') ||
+    getAPIMap('pipelineFlow') ||
+    '/v1/pipeline/pipeline-flow';
+  const response = await api.get(url, { params });
   return response.data;
 };
 
@@ -34,7 +46,11 @@ export const getPipelineFlowApi = async (params = {}) => {
  * @param {Object} params - { scheduler_id, search, from, to }
  */
 export const getSummaryCardsApi = async (params = {}) => {
-  const response = await api.get(getAPIMap('getSummaryCards'), { params });
+  const url =
+    getAPIMap('getSummaryCards') ||
+    getAPIMap('summaryCards') ||
+    '/v1/pipeline/summary-cards';
+  const response = await api.get(url, { params });
   return response.data;
 };
 

@@ -197,6 +197,24 @@ export const FollowUpDetailModal = ({
   }, [jobsResponse, formData.interview_company]);
 
   useEffect(() => {
+    if (!isOpen) {
+      setFormData({
+        candidate_name: "",
+        phone: "",
+        email: "",
+        interview_company: "",
+        interview_date: "",
+        interview_time: "",
+        role: "",
+        scheduler_id: "",
+        status: "pending",
+        notes: "",
+      });
+      setErrors({});
+      setIsSubmitting(false);
+      return;
+    }
+
     const matchedScheduler = schedulerOptions.find(
       (s) =>
         (activeRecord?.scheduler_email &&
@@ -256,22 +274,22 @@ export const FollowUpDetailModal = ({
         notes: activeRecord.notes || "",
       });
     } else {
-      setFormData({
-        candidate_name: "",
-        phone: "",
-        email: "",
-        interview_company: "",
-        interview_date: "",
-        interview_time: "",
-        role: "",
-        scheduler_id: defaultSchedulerId,
+      setFormData((prev) => ({
+        candidate_name: prev.candidate_name || "",
+        phone: prev.phone || "",
+        email: prev.email || "",
+        interview_company: prev.interview_company || "",
+        interview_date: prev.interview_date || "",
+        interview_time: prev.interview_time || "",
+        role: prev.role || "",
+        scheduler_id: prev.scheduler_id || defaultSchedulerId,
         status: "pending",
-        notes: "",
-      });
+        notes: prev.notes || "",
+      }));
     }
     setErrors({});
     setIsSubmitting(false);
-  }, [activeRecord, initialData, schedulers, schedulerOptions, isOpen]);
+  }, [activeRecord, initialData, isOpen]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -328,12 +346,19 @@ export const FollowUpDetailModal = ({
         c.value === formData.interview_company ||
         c.label === formData.interview_company,
     );
-    const job = jobOptions.find(
-      (j) =>
-        String(j.value) === String(formData.role) ||
-        j.label === formData.role ||
-        j.name === formData.role,
-    );
+    const allJobs = jobsResponse?.data || [];
+    const job =
+      jobOptions.find(
+        (j) =>
+          String(j.value) === String(formData.role) ||
+          j.label === formData.role ||
+          j.name === formData.role,
+      ) ||
+      allJobs.find(
+        (j) =>
+          String(j.job_id) === String(formData.role) ||
+          j.job_title === formData.role,
+      );
 
     if (formData.role && !job && !activeRecord?.job_id) {
       alert(
@@ -363,9 +388,9 @@ export const FollowUpDetailModal = ({
       phone_number: fullPhone,
       company_name: company
         ? company.label
-        : job?.company || formData.interview_company,
-      job_id: job ? String(job.value) : activeRecord?.job_id || "",
-      job_title: job ? job.name : formData.role,
+        : job?.company || job?.company_name || formData.interview_company,
+      job_id: job ? String(job.value || job.job_id) : activeRecord?.job_id || "",
+      job_title: job ? (job.name || job.job_title) : formData.role,
     };
 
     const payload = isRescheduleRequested
@@ -379,6 +404,11 @@ export const FollowUpDetailModal = ({
       });
     } catch (err) {
       console.error(err);
+      alert(
+        err?.response?.data?.message ||
+          err?.message ||
+          t("modals.saveError", { defaultValue: "Failed to save record." }),
+      );
     } finally {
       setIsSubmitting(false);
     }

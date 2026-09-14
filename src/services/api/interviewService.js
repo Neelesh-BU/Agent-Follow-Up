@@ -6,7 +6,11 @@ import { getAPIMap } from '@/routes/ApiUrls';
  * @param {Object} payload - Interview data
  */
 export const createInterviewApi = async (payload) => {
-  const response = await api.post(getAPIMap('createInterview'), payload);
+  const url =
+    getAPIMap('createInterview') ||
+    getAPIMap('interviews') ||
+    '/v1/interviews/create-interview';
+  const response = await api.post(url, payload);
   return response.data;
 };
 
@@ -15,7 +19,8 @@ export const createInterviewApi = async (payload) => {
  * @param {Object} payload - Reschedule data
  */
 export const rescheduleInterviewApi = async (payload) => {
-  const response = await api.post(getAPIMap('rescheduleInterview'), payload);
+  const url = getAPIMap('rescheduleInterview') || '/v1/interviews/reschedule';
+  const response = await api.post(url, payload);
   return response.data;
 };
 
@@ -25,7 +30,9 @@ export const rescheduleInterviewApi = async (payload) => {
  * @param {Object} payload - Fields to update
  */
 export const updateInterviewApi = async (interviewId, payload) => {
-  const url = getAPIMap('updateInterview').replace(':interviewId', interviewId);
+  const id = typeof interviewId === 'object' ? interviewId?.id || interviewId?.interviewId : interviewId;
+  const endpoint = getAPIMap('updateInterview') || '/v1/interviews/:interviewId/update';
+  const url = endpoint.replace(':interviewId', id).replace('{id}', id);
   const response = await api.patch(url, payload);
   return response.data;
 };
@@ -35,7 +42,9 @@ export const updateInterviewApi = async (interviewId, payload) => {
  * @param {string|number} interviewId - ID of interview
  */
 export const deleteInterviewApi = async (interviewId) => {
-  const url = getAPIMap('deleteInterview').replace(':interviewId', interviewId);
+  const id = typeof interviewId === 'object' ? interviewId?.id || interviewId?.interviewId : interviewId;
+  const endpoint = getAPIMap('deleteInterview') || '/v1/interviews/:interviewId/delete';
+  const url = endpoint.replace(':interviewId', id).replace('{id}', id);
   const response = await api.delete(url);
   return response.data;
 };
@@ -45,7 +54,9 @@ export const deleteInterviewApi = async (interviewId) => {
  * @param {string|number} interviewId - ID of interview
  */
 export const callNowApi = async (interviewId) => {
-  const url = getAPIMap('callNow').replace(':interviewId', interviewId);
+  const id = typeof interviewId === 'object' ? interviewId?.id || interviewId?.interviewId : interviewId;
+  const endpoint = getAPIMap('callNow') || '/v1/interviews/:interviewId/call-now';
+  const url = endpoint.replace(':interviewId', id).replace('{id}', id);
   const response = await api.post(url);
   return response.data;
 };

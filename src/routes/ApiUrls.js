@@ -7,19 +7,25 @@ export const APIMapping = {
 
   // Export Route
   interviewExcel: '/v1/export/interviews.xlsx',
+  exportCsv: '/v1/export/interviews.xlsx',
 
   // Interview Route
-  createInterview: '/v1/interview/create-interview',
-  rescheduleInterview: '/v1/interview/reschedule',
-  updateInterview: '/v1/interview/:interviewId/update',
-  deleteInterview: '/v1/interview/:interviewId/delete',
-  callNow: '/v1/interview/:interviewId/call-now',
+  interviews: '/v1/interviews/create-interview',
+  createInterview: '/v1/interviews/create-interview',
+  rescheduleInterview: '/v1/interviews/reschedule',
+  updateInterview: '/v1/interviews/:interviewId/update',
+  deleteInterview: '/v1/interviews/:interviewId/delete',
+  callNow: '/v1/interviews/:interviewId/call-now',
 
   // Pipeline Route
   listTableRecords: '/v1/pipeline/list-table-records',
+  pipelineListTable: '/v1/pipeline/list-table-records',
   viewTableRecord: '/v1/pipeline/view-table-records',
+  viewRecord: '/v1/pipeline/view-table-records',
   getPipelineFlow: '/v1/pipeline/pipeline-flow',
+  pipelineFlow: '/v1/pipeline/pipeline-flow',
   getSummaryCards: '/v1/pipeline/summary-cards',
+  summaryCards: '/v1/pipeline/summary-cards',
 
   // Scheduler Route
   getAccountsOverview: '/v1/scheduler/accounts-overview',
