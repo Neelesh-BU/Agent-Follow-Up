@@ -5,10 +5,11 @@ import useNotification from "@/hooks/useNotification";
 import useAuthMutations from "@/hooks/queries/useAuthQueries";
 import { splitPhone, userInitials } from "@/utils/formatters";
 import { getRoleLabel } from "@/utils/roles";
+import AccountSkeleton from "@/components/account/AccountSkeleton";
 
 export const AccountPage = () => {
   const { t } = useTranslation();
-  const { user, setUser } = useAuth();
+  const { user, setUser, isLoading: isAuthLoading } = useAuth();
   const { showSuccess, showError } = useNotification();
   const { updateProfileMutation } = useAuthMutations();
 
@@ -112,6 +113,10 @@ export const AccountPage = () => {
   };
 
   const isSubmitting = updateProfileMutation.isPending;
+
+  if (isAuthLoading || !user) {
+    return <AccountSkeleton />;
+  }
 
   return (
     <div className="max-w-2xl mx-auto flex flex-col gap-5 py-4">

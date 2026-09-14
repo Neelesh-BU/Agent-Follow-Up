@@ -9,7 +9,6 @@ import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined
 import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
 import PauseCircleOutlineOutlinedIcon from '@mui/icons-material/PauseCircleOutlineOutlined';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
-import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import useNotification from '@/hooks/useNotification';
 import {
   useJobsQuery,
@@ -19,9 +18,11 @@ import {
 } from '@/hooks/queries/useJobQueries';
 import AddJobDrawer from '@/components/jobs/AddJobDrawer';
 import DeleteJobModal from '@/components/jobs/DeleteJobModal';
-import LoadingSpinner from '@/components/common/LoadingSpinner';
+import ViewJobModal from '@/components/jobs/ViewJobModal';
+import JobsSkeleton from '@/components/jobs/JobsSkeleton';
 import PaginationBar from '@/components/common/PaginationBar';
 import SelectDropdown from '@/components/common/SelectDropdown';
+import CustomTooltip from '@/components/common/CustomTooltip';
 import { plainDate } from '@/utils/formatters';
 
 export const JobsPage = () => {
@@ -82,10 +83,17 @@ export const JobsPage = () => {
         data: { status: nextStatus },
       });
       showSuccess(`Job #${job.job_id} is now ${nextStatus}`);
+      if (selectedJobForView && selectedJobForView.job_id === job.job_id) {
+        setSelectedJobForView((prev) => (prev ? { ...prev, status: nextStatus } : null));
+      }
     } catch (err) {
       showError(err.response?.data?.message || err.message || 'Failed to update job status');
     }
   };
+
+  if (isLoading) {
+    return <JobsSkeleton />;
+  }
 
   return (
     <div className='p-6 md:p-8 max-w-7xl mx-auto space-y-6'>
@@ -224,9 +232,37 @@ export const JobsPage = () => {
 
       {/* Table Container */}
       <div className='bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden'>
-        {isLoading ? (
-          <div className='p-16 flex items-center justify-center'>
-            <LoadingSpinner />
+        {isFetching && !jobsList.length ? (
+          <div className='divide-y divide-slate-100 animate-pulse'>
+            {[1, 2, 3, 4, 5].map((row) => (
+              <div
+                key={row}
+                className='px-6 py-4 grid grid-cols-12 gap-4 items-center'
+              >
+                <div className='col-span-2 flex items-center'>
+                  <div className='h-6 w-16 bg-emerald-100/70 rounded-md' />
+                </div>
+                <div className='col-span-3 space-y-1.5'>
+                  <div className='h-4 w-40 max-w-full bg-slate-300/80 rounded' />
+                  <div className='h-3 w-24 bg-slate-200/70 rounded' />
+                </div>
+                <div className='col-span-2 hidden md:block'>
+                  <div className='h-3.5 w-28 bg-slate-200/80 rounded' />
+                </div>
+                <div className='col-span-2 hidden lg:block space-y-1'>
+                  <div className='h-3.5 w-24 bg-slate-200/80 rounded' />
+                  <div className='h-2.5 w-16 bg-slate-100 rounded' />
+                </div>
+                <div className='col-span-2 md:col-span-3 lg:col-span-1'>
+                  <div className='h-6 w-20 bg-slate-200/70 rounded-full' />
+                </div>
+                <div className='col-span-2 flex items-center justify-end gap-2'>
+                  <div className='w-8 h-8 rounded-lg bg-slate-100' />
+                  <div className='w-8 h-8 rounded-lg bg-emerald-100/70' />
+                  <div className='w-8 h-8 rounded-lg bg-red-100/60' />
+                </div>
+              </div>
+            ))}
           </div>
         ) : jobsList.length === 0 ? (
           <div className='py-20 px-6 flex flex-col items-center justify-center text-center'>
@@ -344,38 +380,79 @@ export const JobsPage = () => {
                       {/* Actions */}
                       <td className='py-3.5 px-4 text-right'>
                         <div className='inline-flex items-center gap-1.5'>
-                          <button
-                            type='button'
-                            onClick={() => setSelectedJobForView(job)}
-                            title='View Job Details'
-                            className='p-1.5 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors cursor-pointer'
+                          <CustomTooltip
+                            title={t('jobs.viewDetails', {
+                              defaultValue: 'View Job Details',
+                            })}
+                            placement='top'
                           >
-                            <VisibilityOutlinedIcon sx={{ fontSize: 16 }} />
-                          </button>
-                          <button
-                            type='button'
-                            onClick={() => handleToggleStatus(job)}
-                            title={isActive ? 'Deactivate Job' : 'Activate Job'}
-                            className={`p-1.5 rounded-lg border text-xs font-bold transition-colors cursor-pointer ${
+                            <button
+                              type='button'
+                              onClick={() => setSelectedJobForView(job)}
+                              aria-label={t('jobs.viewDetails', {
+                                defaultValue: 'View Job Details',
+                              })}
+                              className='p-1.5 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors cursor-pointer'
+                            >
+                              <VisibilityOutlinedIcon sx={{ fontSize: 16 }} />
+                            </button>
+                          </CustomTooltip>
+
+                          <CustomTooltip
+                            title={
                               isActive
-                                ? 'border-amber-200 text-amber-700 hover:bg-amber-50'
-                                : 'border-emerald-200 text-emerald-700 hover:bg-emerald-50'
-                            }`}
+                                ? t('jobs.deactivateJob', {
+                                    defaultValue: 'Deactivate Job',
+                                  })
+                                : t('jobs.activateJob', {
+                                    defaultValue: 'Activate Job',
+                                  })
+                            }
+                            placement='top'
                           >
-                            {isActive ? (
-                              <PauseCircleOutlineOutlinedIcon sx={{ fontSize: 16 }} />
-                            ) : (
-                              <CheckCircleOutlineOutlinedIcon sx={{ fontSize: 16 }} />
-                            )}
-                          </button>
-                          <button
-                            type='button'
-                            onClick={() => setJobToDelete(job)}
-                            title='Delete Job'
-                            className='p-1.5 rounded-lg border border-slate-200 text-rose-600 hover:bg-rose-50 hover:border-rose-200 transition-colors cursor-pointer'
+                            <button
+                              type='button'
+                              onClick={() => handleToggleStatus(job)}
+                              aria-label={
+                                isActive
+                                  ? t('jobs.deactivateJob', {
+                                      defaultValue: 'Deactivate Job',
+                                    })
+                                  : t('jobs.activateJob', {
+                                      defaultValue: 'Activate Job',
+                                    })
+                              }
+                              className={`p-1.5 rounded-lg border text-xs font-bold transition-colors cursor-pointer ${
+                                isActive
+                                  ? 'border-amber-200 text-amber-700 hover:bg-amber-50'
+                                  : 'border-emerald-200 text-emerald-700 hover:bg-emerald-50'
+                              }`}
+                            >
+                              {isActive ? (
+                                <PauseCircleOutlineOutlinedIcon sx={{ fontSize: 16 }} />
+                              ) : (
+                                <CheckCircleOutlineOutlinedIcon sx={{ fontSize: 16 }} />
+                              )}
+                            </button>
+                          </CustomTooltip>
+
+                          <CustomTooltip
+                            title={t('jobs.deleteJob', {
+                              defaultValue: 'Delete Job',
+                            })}
+                            placement='top'
                           >
-                            <DeleteOutlineOutlinedIcon sx={{ fontSize: 16 }} />
-                          </button>
+                            <button
+                              type='button'
+                              onClick={() => setJobToDelete(job)}
+                              aria-label={t('jobs.deleteJob', {
+                                defaultValue: 'Delete Job',
+                              })}
+                              className='p-1.5 rounded-lg border border-slate-200 text-rose-600 hover:bg-rose-50 hover:border-rose-200 transition-colors cursor-pointer'
+                            >
+                              <DeleteOutlineOutlinedIcon sx={{ fontSize: 16 }} />
+                            </button>
+                          </CustomTooltip>
                         </div>
                       </td>
                     </tr>
@@ -406,87 +483,12 @@ export const JobsPage = () => {
       />
 
       {/* View Job Details Modal */}
-      {selectedJobForView && (
-        <div className='fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs animate-in fade-in duration-150'>
-          <div className='bg-white rounded-2xl border border-slate-200 shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden animate-in zoom-in-95 duration-200'>
-            {/* Modal Header */}
-            <div className='flex items-center justify-between px-6 py-4 border-b border-slate-200 bg-slate-50/80'>
-              <div className='flex items-center gap-3'>
-                <span className='px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200 font-mono font-bold text-xs'>
-                  #{selectedJobForView.job_id}
-                </span>
-                <div>
-                  <h3 className='text-base font-extrabold text-slate-900 leading-none'>
-                    {selectedJobForView.job_title}
-                  </h3>
-                  <span className='text-xs font-semibold text-slate-500 mt-1 inline-block'>
-                    {selectedJobForView.company_name} {selectedJobForView.department ? `• ${selectedJobForView.department}` : ''}
-                  </span>
-                </div>
-              </div>
-              <button
-                type='button'
-                onClick={() => setSelectedJobForView(null)}
-                className='w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 transition-colors cursor-pointer'
-              >
-                <CloseOutlinedIcon sx={{ fontSize: 18 }} />
-              </button>
-            </div>
-
-            {/* Modal Content */}
-            <div className='p-6 overflow-y-auto space-y-4'>
-              {/* Badges */}
-              <div className='flex flex-wrap items-center gap-2 text-xs'>
-                <span className='px-2.5 py-1 bg-slate-100 text-slate-700 rounded-lg font-bold'>
-                  📍 {selectedJobForView.location || 'Remote'}
-                </span>
-                <span className='px-2.5 py-1 bg-slate-100 text-slate-700 rounded-lg font-bold uppercase'>
-                  💼 {selectedJobForView.job_type || 'Full-time'}
-                </span>
-                <span
-                  className={`px-2.5 py-1 rounded-lg font-bold capitalize ${
-                    selectedJobForView.status === 'active'
-                      ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                      : 'bg-rose-50 text-rose-700 border border-rose-200'
-                  }`}
-                >
-                  {selectedJobForView.status}
-                </span>
-              </div>
-
-              {/* Formatted Description */}
-              <div className='mt-2'>
-                <h4 className='text-xs font-bold text-slate-700 uppercase tracking-wider mb-2'>
-                  Job Description & Requirements
-                </h4>
-                {selectedJobForView.job_description ? (
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: selectedJobForView.job_description,
-                    }}
-                    className='p-4 rounded-xl bg-slate-50/60 border border-slate-200/80 text-xs text-slate-800 leading-relaxed [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:my-2 [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:my-2 [&_li]:my-1 [&_strong]:font-bold [&_strong]:text-slate-900 [&_em]:italic [&_u]:underline'
-                  />
-                ) : (
-                  <div className='p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-400 italic'>
-                    No description provided for this position.
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Modal Footer */}
-            <div className='px-6 py-3 border-t border-slate-100 bg-slate-50 flex items-center justify-end'>
-              <button
-                type='button'
-                onClick={() => setSelectedJobForView(null)}
-                className='px-4 py-2 rounded-xl border border-slate-300 text-slate-700 hover:bg-slate-100 font-bold text-xs cursor-pointer'
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <ViewJobModal
+        isOpen={Boolean(selectedJobForView)}
+        job={selectedJobForView}
+        onClose={() => setSelectedJobForView(null)}
+        onToggleStatus={handleToggleStatus}
+      />
 
       {/* Delete Job Confirmation Modal */}
       <DeleteJobModal

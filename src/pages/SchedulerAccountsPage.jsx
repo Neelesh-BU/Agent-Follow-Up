@@ -9,7 +9,7 @@ import {
 } from '@/hooks/queries/useSchedulerQueries';
 import AddSchedulerModal from '@/components/schedulers/AddSchedulerModal';
 import DeactivateSchedulerModal from '@/components/schedulers/DeactivateSchedulerModal';
-import LoadingSpinner from '@/components/common/LoadingSpinner';
+import SchedulerAccountsSkeleton from '@/components/schedulers/SchedulerAccountsSkeleton';
 import PaginationBar from '@/components/common/PaginationBar';
 import { plainDate } from '@/utils/formatters';
 import { isDeactivated } from '@/utils/roles';
@@ -252,7 +252,7 @@ export const SchedulerAccountsPage = () => {
   );
 
   if (isLoading) {
-    return <LoadingSpinner message='Loading scheduler accounts...' />;
+    return <SchedulerAccountsSkeleton />;
   }
 
   return (

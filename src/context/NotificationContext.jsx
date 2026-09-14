@@ -1,55 +1,50 @@
-import { createContext, useState, useCallback } from 'react';
-import { Snackbar, Alert } from '@mui/material';
+import { createContext, useCallback } from 'react';
+import { toast } from 'sonner';
+import { Toaster } from '@/components/ui/sonner';
 
 export const NotificationContext = createContext({
   showSuccess: () => {},
   showError: () => {},
   showWarning: () => {},
   showInfo: () => {},
+  showNotification: () => {},
 });
 
 export const NotificationProvider = ({ children }) => {
-  const [notification, setNotification] = useState({
-    open: false,
-    message: '',
-    severity: 'info', // 'success' | 'error' | 'warning' | 'info'
-    autoHideDuration: 4000,
-  });
-
-  const handleClose = (event, reason) => {
-    if (reason === 'clickaway') return;
-    setNotification((prev) => ({ ...prev, open: false }));
-  };
-
   const showNotification = useCallback(
-    (message, severity = 'info', autoHideDuration = 4000) => {
-      setNotification({
-        open: true,
-        message,
-        severity,
-        autoHideDuration,
-      });
+    (message, severity = 'info', options = {}) => {
+      switch (severity) {
+        case 'success':
+          return toast.success(message, options);
+        case 'error':
+          return toast.error(message, options);
+        case 'warning':
+          return toast.warning(message, options);
+        case 'info':
+        default:
+          return toast.info(message, options);
+      }
     },
     [],
   );
 
   const showSuccess = useCallback(
-    (message) => showNotification(message, 'success'),
+    (message, options) => showNotification(message, 'success', options),
     [showNotification],
   );
 
   const showError = useCallback(
-    (message) => showNotification(message, 'error'),
+    (message, options) => showNotification(message, 'error', options),
     [showNotification],
   );
 
   const showWarning = useCallback(
-    (message) => showNotification(message, 'warning'),
+    (message, options) => showNotification(message, 'warning', options),
     [showNotification],
   );
 
   const showInfo = useCallback(
-    (message) => showNotification(message, 'info'),
+    (message, options) => showNotification(message, 'info', options),
     [showNotification],
   );
 
@@ -64,21 +59,10 @@ export const NotificationProvider = ({ children }) => {
       }}
     >
       {children}
-      <Snackbar
-        open={notification.open}
-        autoHideDuration={notification.autoHideDuration}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-      >
-        <Alert
-          onClose={handleClose}
-          severity={notification.severity}
-          variant='filled'
-          sx={{ width: '100%', boxShadow: 3 }}
-        >
-          {notification.message}
-        </Alert>
-      </Snackbar>
+      <Toaster position='top-right' closeButton />
     </NotificationContext.Provider>
   );
 };
+
+export default NotificationProvider;
+

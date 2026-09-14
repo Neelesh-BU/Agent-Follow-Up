@@ -79,6 +79,21 @@ export const RichTextEditor = ({
     handleInput();
   };
 
+  const handlePaste = (e) => {
+    const html = e.clipboardData?.getData('text/html');
+    if (html) {
+      e.preventDefault();
+      // Clean up AI and web selection artifacts
+      const cleanedHtml = html
+        .replace(/<span[^>]*class="[^"]*selectionAnchor[^"]*"[^>]*><\/span>/gi, '')
+        .replace(/<span[^>]*class="[^"]*selectionAnchorContainer[^"]*"[^>]*>/gi, '')
+        .replace(/\s*data-(start|end|section-id)="[^"]*"/gi, '')
+        .replace(/\s*class="PDq2pG_[^"]*"/gi, '');
+      document.execCommand('insertHTML', false, cleanedHtml);
+      handleInput();
+    }
+  };
+
   return (
     <div
       className={`border border-slate-300 rounded-xl overflow-hidden bg-white transition-all focus-within:border-[#10b981] focus-within:ring-2 focus-within:ring-[#10b981]/15 ${className}`}
@@ -185,6 +200,7 @@ export const RichTextEditor = ({
           ref={editorRef}
           contentEditable
           onInput={handleInput}
+          onPaste={handlePaste}
           onKeyUp={updateActiveFormats}
           onMouseUp={updateActiveFormats}
           onSelect={updateActiveFormats}

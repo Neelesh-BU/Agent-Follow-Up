@@ -207,3 +207,49 @@ export const isAwaitingResponse = (item) => {
   );
   return whatsappSent && !hasReply;
 };
+
+/**
+ * Robustly decodes and cleans HTML from job descriptions.
+ * Handles entity-escaped HTML (&lt;p...&gt;), AI copy-paste artifacts
+ * (data-start, selection anchors), and plain text fallback.
+ */
+export const cleanAndFormatHtml = (rawDescription) => {
+  if (!rawDescription) return '';
+
+  let html = String(rawDescription).trim();
+
+  // 1. Decode HTML entities if present (e.g. &lt;p data-start=...&gt;)
+  if (typeof document !== 'undefined' && /&lt;|&gt;|&amp;|&#/.test(html)) {
+    try {
+      const txt = document.createElement('textarea');
+      txt.innerHTML = html;
+      html = txt.value;
+      // Handle potential double-encoding
+      if (/&lt;|&gt;/.test(html)) {
+        txt.innerHTML = html;
+        html = txt.value;
+      }
+    } catch {
+      // Fallback in case document is unavailable
+    }
+  }
+
+  // 2. Remove AI / editor selection anchors (e.g. <span class="PDq2pG_selectionAnchor"></span>)
+  html = html.replace(/<span[^>]*class="[^"]*selectionAnchor[^"]*"[^>]*><\/span>/gi, '');
+  html = html.replace(/<span[^>]*class="[^"]*selectionAnchorContainer[^"]*"[^>]*>/gi, '');
+
+  // 3. Strip noisy internal attributes (data-start, data-end, data-section-id, class="PDq2pG_...")
+  html = html.replace(/\s*data-(start|end|section-id)="[^"]*"/gi, '');
+  html = html.replace(/\s*class="PDq2pG_[^"]*"/gi, '');
+
+  // 4. If plain text without HTML tags, wrap lines into formatted paragraphs
+  const hasHtmlTags = /<[a-z][\s\S]*>/i.test(html);
+  if (!hasHtmlTags) {
+    html = html
+      .split(/\n{2,}/)
+      .map((para) => `<p>${para.replace(/\n/g, '<br/>')}</p>`)
+      .join('');
+  }
+
+  return html;
+};
