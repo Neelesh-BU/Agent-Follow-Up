@@ -17,7 +17,7 @@ function App() {
           <AuthProvider>
             <NotificationProvider>
               <BrowserRouter>
-                <AppRoutes />
+                <AppRoutes /> 
               </BrowserRouter>
             </NotificationProvider>
           </AuthProvider>
